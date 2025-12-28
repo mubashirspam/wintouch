@@ -13,6 +13,8 @@ import {
   FAQ,
   ImageGallery,
   PageHeader,
+  Team,
+  TeamPage,
 } from "@/app/components/sections";
 
 export default function WintouchApp() {
@@ -37,6 +39,7 @@ export default function WintouchApp() {
             <VisionMission />
             <Programs />
             <UniqueFeatures />
+            <Team onNavigate={handleNav} />
             <Testimonials />
             <ImageGallery />
             <Admissions />
@@ -54,6 +57,7 @@ export default function WintouchApp() {
             />
             <About />
             <VisionMission />
+            <Team onNavigate={handleNav} />
             <UniqueFeatures />
           </div>
         )}
@@ -92,6 +96,13 @@ export default function WintouchApp() {
               <Admissions />
             </div>
             <FAQ />
+          </div>
+        )}
+
+        {/* Team Page - Full team view */}
+        {activePage === "team" && (
+          <div className="animate-fade-in-up">
+            <TeamPage onNavigate={handleNav} />
           </div>
         )}
       </main>

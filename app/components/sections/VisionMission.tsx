@@ -1,7 +1,30 @@
 "use client";
 
-import { Target, Eye, Compass, Sparkles } from "lucide-react";
+import {
+  Target,
+  Eye,
+  Compass,
+  Sparkles,
+  // Core Values Icons
+  Award,
+  Diamond,
+  Moon,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
 import { SectionHeading } from "@/app/components/ui";
+
+// Core Values Data
+const CORE_VALUES: { label: string; icon: LucideIcon; gradient: string }[] = [
+  {
+    label: "Excellence",
+    icon: Award,
+    gradient: "from-amber-400 to-orange-500",
+  },
+  { label: "Integrity", icon: Diamond, gradient: "from-cyan-400 to-blue-500" },
+  { label: "Faith", icon: Moon, gradient: "from-violet-400 to-purple-500" },
+  { label: "Empowerment", icon: Zap, gradient: "from-rose-400 to-pink-500" },
+];
 
 export default function VisionMission() {
   return (
@@ -79,22 +102,33 @@ export default function VisionMission() {
             Our Core Values
           </h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "Excellence", icon: "🎯" },
-              { label: "Integrity", icon: "💎" },
-              { label: "Faith", icon: "🌙" },
-              { label: "Empowerment", icon: "✨" },
-            ].map((value, idx) => (
-              <div
-                key={idx}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group"
-              >
-                <span className="text-3xl mb-3 block group-hover:scale-110 transition-transform duration-300">
-                  {value.icon}
-                </span>
-                <span className="text-white font-semibold">{value.label}</span>
-              </div>
-            ))}
+            {CORE_VALUES.map((value, idx) => {
+              const Icon = value.icon;
+              return (
+                <div
+                  key={idx}
+                  className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 overflow-hidden"
+                >
+                  {/* Gradient Glow */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${value.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                  />
+
+                  {/* Icon Container */}
+                  <div
+                    className={`relative z-10 w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-br ${value.gradient} p-0.5 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <div className="w-full h-full bg-[#2D1B2E] rounded-xl flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+
+                  <span className="relative z-10 text-white font-semibold">
+                    {value.label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

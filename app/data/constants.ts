@@ -1,5 +1,15 @@
 import { ReactNode } from "react";
-import { BookOpen, Users, Trophy, ShieldCheck, Heart } from "lucide-react";
+import {
+  BookOpen,
+  Users,
+  Trophy,
+  ShieldCheck,
+  Heart,
+  // Unique Features Icons
+  Flame,
+  ShieldHalf,
+  Moon,
+} from "lucide-react";
 import React from "react";
 
 // Types
@@ -32,8 +42,8 @@ export interface NavLink {
 export interface UniqueFeature {
   title: string;
   desc: string;
-  img: string;
-  icon: string;
+  icon: ReactNode;
+  gradient: string;
 }
 
 export interface GalleryImage {
@@ -128,20 +138,20 @@ export const UNIQUE_FEATURES: UniqueFeature[] = [
   {
     title: "Horse Training",
     desc: "Expert-led equestrian training to build core strength, balance, and confidence.",
-    img: "/01196.JPG",
-    icon: "🐎",
+    icon: React.createElement(Flame, { className: "w-10 h-10" }),
+    gradient: "from-amber-500 to-orange-600",
   },
   {
     title: "Safe Playground",
     desc: "Expansive, private sports grounds for badminton, basketball, and athletics.",
-    img: "/01133.JPG",
-    icon: "🏀",
+    icon: React.createElement(ShieldHalf, { className: "w-10 h-10" }),
+    gradient: "from-emerald-500 to-teal-600",
   },
   {
     title: "Islamic Life",
     desc: "Daily prayers, Quran study circles, and a supportive moral environment.",
-    img: "/0406.JPG",
-    icon: "☪️",
+    icon: React.createElement(Moon, { className: "w-10 h-10" }),
+    gradient: "from-violet-500 to-purple-600",
   },
 ];
 
@@ -234,4 +244,103 @@ export const FOOTER_CAMPUS_LIFE = [
   "Equestrian Club",
   "Halal Dining",
   "Safety & Security",
+];
+
+// Team Members Interface
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  department: string;
+  image: string;
+  bio: string;
+  isFeatured?: boolean;
+}
+
+// Team Members Data
+export const TEAM_MEMBERS: TeamMember[] = [
+  {
+    id: 1,
+    name: "Dr. Fathima Zahra",
+    role: "Founder & CEO",
+    department: "Leadership",
+    image: "/team/member-1.png",
+    bio: "Visionary educationist with 20+ years of experience in transforming girls' education. PhD in Educational Leadership from Oxford.",
+    isFeatured: true,
+  },
+  {
+    id: 2,
+    name: "Dr. Ayesha Rahman",
+    role: "Academic Director",
+    department: "Academics",
+    image: "/team/member-2.png",
+    bio: "Former NEET topper and medical college professor with expertise in designing competitive exam curricula.",
+    isFeatured: true,
+  },
+  {
+    id: 3,
+    name: "Ms. Mariam Sultana",
+    role: "Head of NEET Program",
+    department: "Academics",
+    image: "/team/member-3.png",
+    bio: "15 years of experience in NEET coaching with a track record of producing top 100 ranks.",
+    isFeatured: true,
+  },
+  {
+    id: 4,
+    name: "Ms. Zainab Hassan",
+    role: "Chief Administrator",
+    department: "Administration",
+    image: "/team/member-4.png",
+    bio: "Expert in educational administration with focus on creating nurturing residential environments.",
+    isFeatured: true,
+  },
+  {
+    id: 5,
+    name: "Ms. Hafsa Begum",
+    role: "Student Counselor",
+    department: "Student Welfare",
+    image: "/team/member-5.png",
+    bio: "Certified child psychologist specializing in adolescent mental health and career guidance.",
+  },
+  {
+    id: 6,
+    name: "Ms. Ruqaiya Khan",
+    role: "Sports Director",
+    department: "Physical Education",
+    image: "/0716.JPG",
+    bio: "National level athlete and certified equestrian trainer dedicated to building physical confidence.",
+  },
+  {
+    id: 7,
+    name: "Dr. Amina Patel",
+    role: "Head of Science",
+    department: "Academics",
+    image: "/0728.JPG",
+    bio: "PhD in Biochemistry with innovative teaching methods for Biology and Chemistry.",
+  },
+  {
+    id: 8,
+    name: "Ms. Khadija Noor",
+    role: "Hostel Warden",
+    department: "Student Welfare",
+    image: "/0367.JPG",
+    bio: "Caring guardian ensuring safety, comfort, and emotional well-being of all residential students.",
+  },
+  {
+    id: 9,
+    name: "Ustazah Maryam Ali",
+    role: "Islamic Studies Head",
+    department: "Islamic Education",
+    image: "/0294.JPG",
+    bio: "Hafiza and Islamic scholar creating a spiritually enriching environment for students.",
+  },
+  {
+    id: 10,
+    name: "Ms. Sarah Ibrahim",
+    role: "Nutrition Head",
+    department: "Health & Wellness",
+    image: "/0815.JPG",
+    bio: "Certified nutritionist managing halal-certified kitchen with balanced, healthy meal plans.",
+  },
 ];
