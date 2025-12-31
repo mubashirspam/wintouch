@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
 import {
   Hero,
@@ -12,102 +9,35 @@ import {
   Admissions,
   FAQ,
   ImageGallery,
-  PageHeader,
   Team,
-  TeamPage,
 } from "@/app/components/sections";
 
-export default function WintouchApp() {
-  const [activePage, setActivePage] = useState("home");
+export const metadata = {
+  title: "Wintouch Academy - Empowering Young Women Through Excellence",
+  description:
+    "Premier girls-only residential academy in Kerala offering NEET coaching and integrated higher secondary education with Islamic values.",
+};
 
-  const handleNav = (id: string) => {
-    setActivePage(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
+export default function HomePage() {
   return (
     <div className="min-h-screen font-sans text-[#2D1B2E]">
-      <RegistrationBanner onNavigate={handleNav} />
-      <Navbar activePage={activePage} onNavigate={handleNav} />
+      <RegistrationBanner />
+      <Navbar />
 
       <main>
-        {/* Home Page */}
-        {activePage === "home" && (
-          <>
-            <Hero onNavigate={handleNav} />
-            <About />
-            <VisionMission />
-            <Programs />
-            <UniqueFeatures />
-            <Team onNavigate={handleNav} />
-            <Testimonials />
-            <ImageGallery />
-            <Admissions />
-            <FAQ />
-          </>
-        )}
-
-        {/* About Page */}
-        {activePage === "about" && (
-          <div className="animate-fade-in-up">
-            <PageHeader
-              title="Our Legacy"
-              subtitle="Nurturing the next generation of women leaders since 2010."
-              variant="dark"
-            />
-            <About />
-            <VisionMission />
-            <Team onNavigate={handleNav} />
-            <UniqueFeatures />
-          </div>
-        )}
-
-        {/* Programs Page */}
-        {activePage === "programs" && (
-          <div className="animate-fade-in-up">
-            <PageHeader
-              title="Academic Programs"
-              subtitle="Structured for success. Designed for focus."
-              variant="primary"
-            />
-            <Programs />
-            <Testimonials />
-          </div>
-        )}
-
-        {/* Campus Life Page */}
-        {activePage === "life" && (
-          <div className="animate-fade-in-up">
-            <PageHeader
-              title="Life at Wintouch"
-              subtitle="A home away from home."
-              variant="accent"
-            />
-            <UniqueFeatures />
-            <ImageGallery />
-            <Testimonials />
-          </div>
-        )}
-
-        {/* Admissions Page */}
-        {activePage === "admissions" && (
-          <div className="animate-fade-in-up">
-            <div className="bg-[#FFFBF0] pt-12">
-              <Admissions />
-            </div>
-            <FAQ />
-          </div>
-        )}
-
-        {/* Team Page - Full team view */}
-        {activePage === "team" && (
-          <div className="animate-fade-in-up">
-            <TeamPage onNavigate={handleNav} />
-          </div>
-        )}
+        <Hero />
+        <About />
+        <VisionMission />
+        <Programs />
+        <UniqueFeatures />
+        <Team />
+        <Testimonials />
+        <ImageGallery />
+        <Admissions />
+        <FAQ />
       </main>
 
-      <Footer onNavigate={handleNav} />
+      <Footer />
     </div>
   );
 }

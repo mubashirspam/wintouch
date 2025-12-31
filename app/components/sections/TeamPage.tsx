@@ -1,14 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { TEAM_MEMBERS } from "@/app/data/constants";
 import { Linkedin, Mail, ArrowLeft, Quote } from "lucide-react";
 
-interface TeamPageProps {
-  onNavigate?: (page: string) => void;
-}
-
-export default function TeamPage({ onNavigate }: TeamPageProps) {
+export default function TeamPage() {
   // CEO/Founder - Featured prominently
   const ceo = TEAM_MEMBERS.find((m) => m.role.includes("CEO"));
   const otherMembers = TEAM_MEMBERS.filter((m) => !m.role.includes("CEO"));
@@ -33,13 +30,13 @@ export default function TeamPage({ onNavigate }: TeamPageProps) {
 
         <div className="container mx-auto px-6 relative z-10">
           {/* Back Button */}
-          <button
-            onClick={() => onNavigate?.("home")}
+          <Link
+            href="/"
             className="group inline-flex items-center gap-2 text-white/70 hover:text-white mb-8 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
-          </button>
+          </Link>
 
           <div className="text-center">
             <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-[#E8A86C] text-sm font-semibold tracking-wider uppercase mb-6">

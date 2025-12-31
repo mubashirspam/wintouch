@@ -2,16 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/app/components/ui";
 import { NAV_LINKS } from "@/app/data/constants";
 
-interface NavbarProps {
-  activePage: string;
-  onNavigate: (id: string) => void;
-}
-
-export default function Navbar({ activePage, onNavigate }: NavbarProps) {
+export default function Navbar() {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -21,9 +19,14 @@ export default function Navbar({ activePage, onNavigate }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNav = (id: string) => {
-    onNavigate(id);
-    setIsMobileMenuOpen(false);
+  const getHref = (id: string) => {
+    if (id === "home") return "/";
+    return `/${id}`;
+  };
+
+  const isActive = (id: string) => {
+    if (id === "home") return pathname === "/";
+    return pathname === `/${id}`;
   };
 
   return (
@@ -36,9 +39,9 @@ export default function Navbar({ activePage, onNavigate }: NavbarProps) {
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <button
+        <Link
+          href="/"
           className="flex items-center gap-3 cursor-pointer"
-          onClick={() => handleNav("home")}
           aria-label="Wintouch Academy home"
         >
           <Image
@@ -48,28 +51,26 @@ export default function Navbar({ activePage, onNavigate }: NavbarProps) {
             height={50}
             priority
           />
-        </button>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
-            <button
+            <Link
               key={link.id}
-              onClick={() => handleNav(link.id)}
+              href={getHref(link.id)}
               className={`text-sm font-semibold transition-colors hover:text-[#8C4B58] ${
-                activePage === link.id ? "text-[#8C4B58]" : "text-[#2D1B2E]"
+                isActive(link.id) ? "text-[#8C4B58]" : "text-[#2D1B2E]"
               }`}
             >
               {link.label}
-            </button>
+            </Link>
           ))}
-          <Button
-            variant="primary"
-            className="py-2 px-6 text-sm"
-            onClick={() => handleNav("admissions")}
-          >
-            Apply Now
-          </Button>
+          <Link href="/admissions">
+            <Button variant="primary" className="py-2 px-6 text-sm">
+              Apply Now
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -86,22 +87,20 @@ export default function Navbar({ activePage, onNavigate }: NavbarProps) {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white/80 backdrop-blur-xl shadow-xl shadow-[#2D1B2E]/10 border-t border-white/50 p-6 flex flex-col gap-4 animate-fade-in-up">
           {NAV_LINKS.map((link) => (
-            <button
+            <Link
               key={link.id}
-              onClick={() => handleNav(link.id)}
+              href={getHref(link.id)}
+              onClick={() => setIsMobileMenuOpen(false)}
               className={`text-left text-lg font-medium py-2 border-b border-gray-50 ${
-                activePage === link.id ? "text-[#8C4B58]" : "text-[#2D1B2E]"
+                isActive(link.id) ? "text-[#8C4B58]" : "text-[#2D1B2E]"
               }`}
             >
               {link.label}
-            </button>
+            </Link>
           ))}
-          <Button
-            className="w-full mt-2"
-            onClick={() => handleNav("admissions")}
-          >
-            Apply Now
-          </Button>
+          <Link href="/admissions" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button className="w-full mt-2">Apply Now</Button>
+          </Link>
         </div>
       )}
     </nav>

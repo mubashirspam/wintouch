@@ -201,24 +201,34 @@ export const GALLERY_IMAGES: GalleryImage[] = [
 // FAQ Data
 export const FAQ_QUESTIONS = [
   {
-    question: "What is the fee structure for NEET repeaters?",
+    question: "ആർക്കൊക്കെ അപേക്ഷിക്കാം?",
     answer:
-      "Our NEET repeater program is competitively priced with flexible payment options. Contact our admissions team for detailed fee breakdown.",
+      "പത്താം ക്ലാസ്സിൽ പഠിക്കുന്ന പെൺകുട്ടികൾക്ക് Plus One Integrated Batch-ലും, Plus Two Science പഠിക്കുന്ന വിദ്യാർഥിനികൾക്ക് Repeaters Batch-ലും അപേക്ഷിക്കാം.",
   },
   {
-    question: "Are parents allowed to visit on weekends?",
+    question: "WET (Wintouch Excellency Test) എന്താണ്?",
     answer:
-      "Yes, parents can visit on designated weekends. We also have a parent portal for regular updates on student progress.",
+      "പഠനത്തിൽ മികവ് പുലർത്തുന്ന വിദ്യാർഥിനികളെ കണ്ടെത്താൻ വിൻടച്ച് അക്കാദമി ഏർപ്പെടുത്തിയ ഓൺലൈൻ പരീക്ഷയാണ് WET. വീട്ടിലിരുന്നും എഴുതാവുന്നതാണ്.",
   },
   {
-    question: "Is the food menu customizable for specific diets?",
+    question: "സ്കോളർഷിപ് എങ്ങനെ ലഭിക്കും?",
     answer:
-      "Absolutely! Our halal-certified kitchen offers customizable meal plans to accommodate dietary preferences and restrictions.",
+      "WET-ൽ 80%+ നേടുന്ന 5 വിദ്യാർഥിനികൾക്ക് പഠനവും താമസവും സൗജന്യം. 70%+ നേടുന്ന 10 വിദ്യാർഥിനികൾക്ക് പഠനം സൗജന്യം.",
   },
   {
-    question: "What safety measures are in place at night?",
+    question: "ക്യാമ്പസിന്റെ പ്രത്യേകതകൾ എന്തൊക്കെ?",
     answer:
-      "24/7 female security staff, CCTV surveillance, biometric access, and dedicated wardens ensure complete safety around the clock.",
+      "AC ക്ലാസ്സ്‌റൂം & ഹോസ്റ്റൽ, 10 വർഷത്തെ പരിചയമുള്ള അദ്ധ്യാപകർ, ഗുണമേന്മയുള്ള ഭക്ഷണം, 24/7 സെക്യൂരിറ്റി, ഇസ്ലാമിക മൂല്യങ്ങളിൽ പരിശീലനം.",
+  },
+  {
+    question: "Parents-ന് visit ചെയ്യാൻ കഴിയുമോ?",
+    answer:
+      "അതെ, നിശ്ചിത ദിവസങ്ങളിൽ parents-ന് visit ചെയ്യാം. Student progress-ന്റെ regular updates-ും parent portal വഴി ലഭിക്കും.",
+  },
+  {
+    question: "രാത്രിയിലെ safety arrangements എന്തൊക്കെ?",
+    answer:
+      "24/7 female security staff, CCTV surveillance, biometric access, dedicated wardens എന്നിവ വഴി പൂർണ്ണ സുരക്ഷ ഉറപ്പാക്കുന്നു.",
   },
 ];
 

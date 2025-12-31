@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, ExternalLink } from "lucide-react";
 import {
   CONTACT_INFO,
@@ -8,11 +9,7 @@ import {
   FOOTER_CAMPUS_LIFE,
 } from "@/app/data/constants";
 
-interface FooterProps {
-  onNavigate: (id: string) => void;
-}
-
-export default function Footer({ onNavigate }: FooterProps) {
+export default function Footer() {
   return (
     <footer className="bg-[#2D1B2E] text-white">
       {/* Contact & Map Section */}
@@ -96,7 +93,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                     .replace("+", "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+                  className="flex items-center gap-2 bg-[#E8A86C] hover:bg-[#D4955A] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
                 >
                   WhatsApp
                   <ExternalLink className="w-4 h-4" />
@@ -153,9 +150,9 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-1">
-            <button
+            <Link
+              href="/"
               className="flex items-center gap-2 mb-6 cursor-pointer"
-              onClick={() => onNavigate("home")}
               aria-label="Go to home"
             >
               <Image
@@ -168,7 +165,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <span className="text-2xl font-bold tracking-tight">
                 Wintouch
               </span>
-            </button>
+            </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               Empowering young women through excellence in education, character
               building, and holistic development.
@@ -210,36 +207,36 @@ export default function Footer({ onNavigate }: FooterProps) {
             <h4 className="font-bold text-lg mb-6">Quick Links</h4>
             <ul className="space-y-4 text-sm text-white/60">
               <li>
-                <button
-                  onClick={() => onNavigate("home")}
+                <Link
+                  href="/"
                   className="hover:text-[#E8A86C] transition-colors"
                 >
                   Home
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate("about")}
+                <Link
+                  href="/about"
                   className="hover:text-[#E8A86C] transition-colors"
                 >
                   About Us
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate("programs")}
+                <Link
+                  href="/programs"
                   className="hover:text-[#E8A86C] transition-colors"
                 >
                   Programs
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate("admissions")}
+                <Link
+                  href="/admissions"
                   className="hover:text-[#E8A86C] transition-colors"
                 >
                   Admissions
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,14 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { TEAM_MEMBERS } from "@/app/data/constants";
 import { ArrowRight, Linkedin, Mail } from "lucide-react";
 
-interface TeamProps {
-  onNavigate?: (page: string) => void;
-}
-
-export default function Team({ onNavigate }: TeamProps) {
+export default function Team() {
   // Show only featured members (first 4) on homepage
   const featuredMembers = TEAM_MEMBERS.filter((m) => m.isFeatured).slice(0, 4);
 
@@ -107,8 +104,8 @@ export default function Team({ onNavigate }: TeamProps) {
 
         {/* View All Button */}
         <div className="mt-16 flex justify-center">
-          <button
-            onClick={() => onNavigate?.("team")}
+          <Link
+            href="/team"
             className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[#2D1B2E] text-white rounded-full font-semibold overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#2D1B2E]/30"
           >
             {/* Gradient Background on Hover */}
@@ -116,7 +113,7 @@ export default function Team({ onNavigate }: TeamProps) {
 
             <span className="relative z-10">Meet All Team Members</span>
             <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

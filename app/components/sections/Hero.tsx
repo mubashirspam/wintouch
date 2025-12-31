@@ -1,13 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/app/components/ui";
 
-interface HeroProps {
-  onNavigate: (id: string) => void;
-}
-
-export default function Hero({ onNavigate }: HeroProps) {
+export default function Hero() {
   const scrollToContent = () => {
     window.scrollTo({
       top: window.innerHeight - 80,
@@ -45,19 +42,19 @@ export default function Hero({ onNavigate }: HeroProps) {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto">
-                  <Button
-                    onClick={() => onNavigate("admissions")}
-                    className="w-full sm:w-auto bg-[#9A4B5A] justify-center"
-                  >
-                    Apply Now <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="bg-[#E4A068] text-white border-white/30 hover:bg-white/30 w-full sm:w-auto justify-center backdrop-blur-md"
-                    onClick={() => onNavigate("programs")}
-                  >
-                    Explore Programs
-                  </Button>
+                  <Link href="/admissions" className="w-full sm:w-auto">
+                    <Button className="w-full sm:w-auto bg-[#9A4B5A] justify-center">
+                      Apply Now <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
+                  <Link href="/programs" className="w-full sm:w-auto">
+                    <Button
+                      variant="secondary"
+                      className="bg-[#E4A068] text-white border-white/30 hover:bg-white/30 w-full sm:w-auto justify-center backdrop-blur-md"
+                    >
+                      Explore Programs
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
