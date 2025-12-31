@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { ScholarshipFormModal } from "@/app/components/ui";
 import {
   Phone,
   MapPin,
@@ -25,17 +26,16 @@ import {
   BookOpen,
 } from "lucide-react";
 
+const SEATS_LEFT = 23;
+
 export default function RepeatersLeadPage() {
-  const [seatsLeft] = useState(23);
-  const [isVisible, setIsVisible] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const [isScholarshipOpen, setIsScholarshipOpen] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
     const interval = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % 5);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -76,21 +76,8 @@ export default function RepeatersLeadPage() {
 
   return (
     <div className="min-h-screen bg-[#8C4B58] overflow-x-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-[#E8A86C]/30 to-transparent rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-gradient-to-tl from-[#2D1B2E]/40 to-transparent rounded-full blur-3xl animate-float" />
-        {/* Floating decorative elements */}
-        <div className="absolute top-1/3 left-1/5 w-4 h-4 bg-[#E8A86C]/50 rounded-full animate-float" />
-        <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-white/30 rounded-full animate-float-delayed" />
-        <div className="absolute bottom-1/3 left-1/3 w-5 h-5 bg-[#E8A86C]/40 rounded-full animate-bounce-slow" />
-      </div>
-
-      {/* Hero Section - Poster Style */}
-      <section
-        ref={heroRef}
-        className="relative min-h-screen flex items-center overflow-hidden"
-      >
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <Image
@@ -106,13 +93,7 @@ export default function RepeatersLeadPage() {
 
         <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Top Bar - Logo & Urgency */}
-          <div
-            className={`flex flex-col md:flex-row items-center justify-between gap-4 mb-8 transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-10"
-            }`}
-          >
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-3">
               <div className="w-14 h-14 md:w-16 md:h-16 relative bg-white rounded-xl p-2">
                 <Image
@@ -129,7 +110,7 @@ export default function RepeatersLeadPage() {
             </div>
 
             {/* Urgency Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-[#E8A86C] text-[#2D1B2E] rounded-full shadow-xl animate-heartbeat touch-target">
+            <div className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-[#E8A86C] text-[#2D1B2E] rounded-full shadow-lg">
               <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
               <span className="font-bold text-sm md:text-base">
                 Repeaters Batch 2026-27
@@ -137,7 +118,7 @@ export default function RepeatersLeadPage() {
               <div className="flex items-center gap-1 bg-[#2D1B2E]/10 px-2 py-1 md:px-3 rounded-full">
                 <Clock className="w-3 h-3 md:w-4 md:h-4" />
                 <span className="font-bold text-xs md:text-sm">
-                  {seatsLeft} Seats Left
+                  {SEATS_LEFT} Seats Left
                 </span>
               </div>
             </div>
@@ -145,16 +126,10 @@ export default function RepeatersLeadPage() {
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[80vh]">
             {/* Left Content */}
-            <div
-              className={`space-y-6 text-center lg:text-left transition-all duration-1000 delay-300 ${
-                isVisible
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-20"
-              }`}
-            >
+            <div className="space-y-6 text-center lg:text-left">
               {/* Malayalam Main Heading */}
               <div className="space-y-2">
-                <p className="text-[#E8A86C] text-sm md:text-base font-medium tracking-wider uppercase animate-slide-in-up">
+                <p className="text-[#E8A86C] text-sm md:text-base font-medium tracking-wider uppercase">
                   ★ Residential Campus for Girls ★
                 </p>
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-tight">
@@ -178,7 +153,7 @@ export default function RepeatersLeadPage() {
               </p>
 
               {/* NEET Badge */}
-              <div className="inline-flex items-center gap-3 px-6 py-3 bg-white text-[#8C4B58] rounded-2xl font-bold text-lg animate-wiggle shadow-xl">
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-white text-[#8C4B58] rounded-2xl font-bold text-lg shadow-lg">
                 <Stethoscope className="w-6 h-6" />
                 NEET REPEATERS BATCH 2026-27
               </div>
@@ -194,44 +169,32 @@ export default function RepeatersLeadPage() {
                 </p>
               </div>
 
-              {/* CTA Buttons - Mobile Friendly */}
+              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-                <a
-                  href="https://forms.gle/XgYEkRzpyecCQV4e8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative inline-flex items-center justify-center gap-3 px-8 py-5 bg-[#E8A86C] text-[#2D1B2E] rounded-2xl font-bold text-lg shadow-2xl shadow-[#2D1B2E]/30 hover:shadow-[#E8A86C]/50 transition-all duration-300 hover:scale-105 active:scale-95 touch-target animate-glow"
+                <button
+                  onClick={() => setIsScholarshipOpen(true)}
+                  className="group inline-flex items-center justify-center gap-3 px-8 py-5 bg-[#E8A86C] text-[#2D1B2E] rounded-2xl font-bold text-lg shadow-lg hover:bg-[#d4975f] transition-colors duration-200 active:scale-95"
                 >
-                  <span className="flex items-center gap-3">
-                    <Play className="w-5 h-5" />
-                    Join Now
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </a>
+                  <Play className="w-5 h-5" />
+                  Join Now
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
                 <a
                   href="tel:+919330500400"
-                  className="inline-flex items-center justify-center gap-3 px-8 py-5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-2xl font-bold text-lg hover:bg-white/20 transition-all duration-300 active:scale-95 touch-target"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-5 bg-white/10 backdrop-blur-sm text-white rounded-2xl font-bold text-lg hover:bg-white/20 transition-colors duration-200 active:scale-95"
                 >
-                  <Phone className="w-5 h-5 animate-wiggle" />
+                  <Phone className="w-5 h-5" />
                   +91 9330 500 400
                 </a>
               </div>
             </div>
 
             {/* Right - Highlight Cards */}
-            <div
-              className={`hidden lg:grid grid-cols-2 gap-4 transition-all duration-1000 delay-500 ${
-                isVisible
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-20"
-              }`}
-            >
+            <div className="hidden lg:grid grid-cols-2 gap-4">
               {highlights.map((item, index) => (
                 <div
                   key={index}
-                  className={`bg-white/10 backdrop-blur-sm border border-white/20 p-6 rounded-3xl hover:bg-white/20 transition-all duration-500 hover:-translate-y-2 cursor-pointer stagger-${
-                    index + 1
-                  } animate-scale-up`}
+                  className="bg-white/10 backdrop-blur-sm p-6 rounded-3xl hover:bg-white/20 transition-colors duration-200"
                 >
                   <div className="p-3 bg-[#E8A86C] rounded-xl w-fit mb-4">
                     <item.icon className="w-6 h-6 text-[#2D1B2E]" />
@@ -242,20 +205,11 @@ export default function RepeatersLeadPage() {
               ))}
             </div>
           </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-            <p className="text-white/60 text-sm">Scroll Down</p>
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
-              <div className="w-1.5 h-3 bg-[#E8A86C] rounded-full animate-bounce" />
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Admission Info Strip */}
-      <section className="relative py-6 bg-[#E8A86C] overflow-hidden">
-        <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <section className="py-6 bg-[#E8A86C]">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-center">
             <div className="flex items-center gap-2">
@@ -277,14 +231,10 @@ export default function RepeatersLeadPage() {
       </section>
 
       {/* Scholarship Section */}
-      <section className="py-16 md:py-24 bg-[#FFFBF0] relative overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#8C4B58]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#E8A86C]/10 rounded-full blur-3xl" />
-
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="py-16 md:py-24 bg-[#FFFBF0]">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#E8A86C]/20 rounded-full text-[#8C4B58] text-sm font-bold mb-4 animate-bounce-slow">
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#E8A86C]/20 rounded-full text-[#8C4B58] text-sm font-bold mb-4">
               <Award className="w-4 h-4" />
               WET - Wintouch Excellency Test
             </div>
@@ -297,7 +247,7 @@ export default function RepeatersLeadPage() {
             </p>
 
             {/* Total Scholarship Value Badge */}
-            <div className="mt-6 inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#8C4B58] to-[#E8A86C] text-white rounded-2xl shadow-xl animate-heartbeat">
+            <div className="mt-6 inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#8C4B58] to-[#E8A86C] text-white rounded-2xl shadow-lg">
               <Sparkles className="w-6 h-6" />
               <div className="text-left">
                 <p className="text-sm font-medium text-white/80">
@@ -310,7 +260,7 @@ export default function RepeatersLeadPage() {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {/* Scholarship Card 1 - Best Value */}
-            <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] text-white shadow-2xl shadow-[#8C4B58]/30 hover:scale-105 transition-all duration-300 touch-target animate-glow">
+            <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] text-white shadow-xl hover:shadow-2xl transition-shadow duration-200">
               <div className="absolute -top-4 -right-4 bg-[#2D1B2E] text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
                 <Sparkles className="w-4 h-4" />
                 Best Value
@@ -327,7 +277,7 @@ export default function RepeatersLeadPage() {
             </div>
 
             {/* Scholarship Card 2 */}
-            <div className="relative p-8 md:p-10 rounded-3xl bg-white border-2 border-[#8C4B58]/30 hover:border-[#8C4B58] shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 touch-target">
+            <div className="relative p-8 md:p-10 rounded-3xl bg-white border-2 border-[#8C4B58]/30 hover:border-[#8C4B58] shadow-lg hover:shadow-xl transition-shadow duration-200">
               <div className="text-6xl md:text-7xl font-black text-[#8C4B58] mb-3">
                 70%+
               </div>
@@ -345,11 +295,11 @@ export default function RepeatersLeadPage() {
       </section>
 
       {/* Who Can Apply Section */}
-      <section className="py-16 md:py-24 relative bg-[#FFFBF0]">
+      <section className="py-16 md:py-24 bg-[#FFFBF0]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Section Header */}
-            <div className="text-center mb-12 animate-slide-in-up">
+            <div className="text-center mb-12">
               <h2 className="text-3xl md:text-5xl font-black text-[#2D1B2E] mb-4">
                 ആർക്കൊക്കെ അപേക്ഷിക്കാം?
               </h2>
@@ -360,7 +310,7 @@ export default function RepeatersLeadPage() {
             </div>
 
             {/* Eligibility Card */}
-            <div className="bg-white rounded-3xl p-6 md:p-10 shadow-2xl shadow-[#8C4B58]/10 border border-[#8C4B58]/20 hover:shadow-[#8C4B58]/20 transition-all duration-500">
+            <div className="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-[#8C4B58]/20">
               <div className="flex flex-col md:flex-row items-start gap-6">
                 <div className="p-4 bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] rounded-2xl shrink-0">
                   <GraduationCap className="w-10 h-10 text-white" />
@@ -382,7 +332,7 @@ export default function RepeatersLeadPage() {
                     {highlights.map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-3 p-4 bg-[#8C4B58]/5 rounded-2xl hover:bg-[#8C4B58]/10 transition-colors touch-target"
+                        className="flex items-center gap-3 p-4 bg-[#8C4B58]/5 rounded-2xl hover:bg-[#8C4B58]/10 transition-colors duration-200"
                       >
                         <item.icon className="w-5 h-5 text-[#8C4B58] shrink-0" />
                         <div>
@@ -401,13 +351,9 @@ export default function RepeatersLeadPage() {
         </div>
       </section>
 
-      {/* Features Section - Interactive Cards */}
-      <section className="py-16 md:py-24 bg-[#2D1B2E] relative overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#8C4B58]/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#E8A86C]/10 rounded-full blur-3xl" />
-
-        <div className="container mx-auto px-4 relative z-10">
+      {/* Features Section */}
+      <section className="py-16 md:py-24 bg-[#2D1B2E]">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
               വിൻടച്ച് അക്കാദമിയുടെ പ്രത്യേകതകൾ
@@ -423,15 +369,15 @@ export default function RepeatersLeadPage() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className={`group relative p-6 md:p-8 rounded-3xl transition-all duration-500 cursor-pointer touch-target ${
+                className={`group p-6 md:p-8 rounded-3xl cursor-pointer transition-colors duration-200 ${
                   activeFeature === index
-                    ? "bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] text-white scale-105 shadow-2xl shadow-[#8C4B58]/40"
-                    : "bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10"
+                    ? "bg-gradient-to-br from-[#8C4B58] to-[#E8A86C]"
+                    : "bg-white/5 hover:bg-white/10"
                 }`}
                 onClick={() => setActiveFeature(index)}
               >
                 <div
-                  className={`p-4 rounded-2xl w-fit mb-4 transition-all duration-300 ${
+                  className={`p-4 rounded-2xl w-fit mb-4 ${
                     activeFeature === index
                       ? "bg-white/20"
                       : "bg-gradient-to-br from-[#8C4B58] to-[#E8A86C]"
@@ -439,7 +385,7 @@ export default function RepeatersLeadPage() {
                 >
                   <feature.icon className="w-7 h-7 text-white" />
                 </div>
-                <p className={`font-bold text-xl mb-2 text-white`}>
+                <p className="font-bold text-xl mb-2 text-white">
                   {feature.text}
                 </p>
                 <p
@@ -449,11 +395,6 @@ export default function RepeatersLeadPage() {
                 >
                   {feature.english}
                 </p>
-
-                {/* Active indicator */}
-                {activeFeature === index && (
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#E8A86C] rotate-45" />
-                )}
               </div>
             ))}
           </div>
@@ -461,15 +402,10 @@ export default function RepeatersLeadPage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 md:py-32 bg-gradient-to-br from-[#2D1B2E] via-[#452c46] to-[#8C4B58] relative overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#E8A86C]/10 rounded-full blur-3xl animate-pulse-glow" />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="py-20 md:py-32 bg-gradient-to-br from-[#2D1B2E] via-[#452c46] to-[#8C4B58]">
+        <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-8">
-            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#E8A86C] text-[#2D1B2E] rounded-full font-bold animate-heartbeat">
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#E8A86C] text-[#2D1B2E] rounded-full font-bold">
               <Heart className="w-5 h-5" />
               Limited Seats Available
             </div>
@@ -485,23 +421,21 @@ export default function RepeatersLeadPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <a
-                href="https://forms.gle/XgYEkRzpyecCQV4e8"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-3 px-10 py-6 bg-[#E8A86C] text-[#2D1B2E] rounded-2xl font-bold text-xl shadow-2xl shadow-[#E8A86C]/30 hover:shadow-[#E8A86C]/50 transition-all duration-300 hover:scale-105 active:scale-95 touch-target animate-glow"
+              <button
+                onClick={() => setIsScholarshipOpen(true)}
+                className="group inline-flex items-center justify-center gap-3 px-10 py-6 bg-[#E8A86C] text-[#2D1B2E] rounded-2xl font-bold text-xl shadow-lg hover:bg-[#d4975f] transition-colors duration-200 active:scale-95"
               >
                 <CheckCircle2 className="w-6 h-6" />
                 Apply Now
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
             </div>
 
             {/* Contact Info */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
               <a
                 href="tel:+919330500400"
-                className="flex items-center gap-2 text-white hover:text-[#E8A86C] transition-colors touch-target text-lg"
+                className="flex items-center gap-2 text-white hover:text-[#E8A86C] transition-colors duration-200 text-lg"
               >
                 <Phone className="w-5 h-5" />
                 <span className="font-bold">+91 9330 500 400</span>
@@ -521,52 +455,42 @@ export default function RepeatersLeadPage() {
       </section>
 
       {/* Floating CTA for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#2D1B2E] via-[#2D1B2E]/95 to-transparent md:hidden z-50">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#2D1B2E] to-transparent md:hidden z-50">
         <div className="flex gap-3">
           <a
             href="tel:+919330500400"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-xl font-bold touch-target"
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl font-bold"
           >
             <Phone className="w-5 h-5" />
             Call Now
           </a>
-          <a
-            href="https://forms.gle/XgYEkRzpyecCQV4e8"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-4 bg-[#E8A86C] text-[#2D1B2E] rounded-xl font-bold touch-target animate-glow"
+          <button
+            onClick={() => setIsScholarshipOpen(true)}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-4 bg-[#E8A86C] text-[#2D1B2E] rounded-xl font-bold"
           >
             Apply Now
             <ArrowRight className="w-5 h-5" />
-          </a>
+          </button>
         </div>
       </div>
 
-      {/* Floating Apply Button - Desktop Right Side */}
-      <div className="hidden md:block fixed right-6 top-1/2 -translate-y-1/2 z-50 animate-slide-in-right">
-        <a
-          href="https://forms.gle/XgYEkRzpyecCQV4e8"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex flex-col items-center gap-3 p-4 bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] rounded-2xl shadow-2xl hover:shadow-[#8C4B58]/50 transition-all duration-300 hover:scale-110 animate-pulse-glow"
-        >
-          <div className="relative">
-            <div className="absolute inset-0 bg-white/20 rounded-full animate-ping" />
-            <div className="relative p-3 bg-white/10 rounded-full backdrop-blur-sm">
-              <Play className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <div className="text-center">
-            <p className="text-white font-black text-sm tracking-wider rotate-0 group-hover:rotate-3 transition-transform">
-              APPLY
-            </p>
-            <p className="text-white font-black text-sm tracking-wider rotate-0 group-hover:rotate-3 transition-transform">
-              NOW
-            </p>
-          </div>
-          <ArrowRight className="w-5 h-5 text-white animate-bounce-horizontal" />
-        </a>
-      </div>
+      {/* Floating Apply Button - Desktop */}
+      <button
+        onClick={() => setIsScholarshipOpen(true)}
+        className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col items-center gap-2 p-4 bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200"
+      >
+        <div className="p-3 bg-white/10 rounded-full">
+          <Play className="w-6 h-6 text-white" />
+        </div>
+        <span className="text-white font-black text-sm">APPLY</span>
+        <span className="text-white font-black text-sm">NOW</span>
+      </button>
+
+      {/* Scholarship Form Modal */}
+      <ScholarshipFormModal
+        isOpen={isScholarshipOpen}
+        onClose={() => setIsScholarshipOpen(false)}
+      />
     </div>
   );
 }

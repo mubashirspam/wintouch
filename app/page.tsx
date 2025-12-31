@@ -10,6 +10,7 @@ import {
   FAQ,
   ImageGallery,
   Team,
+  ScholarshipForm,
 } from "@/app/components/sections";
 
 export const metadata = {
@@ -34,6 +35,7 @@ export default function HomePage() {
         <Testimonials />
         <ImageGallery />
         <Admissions />
+        <ScholarshipForm />
         <FAQ />
       </main>
 
