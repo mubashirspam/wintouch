@@ -75,7 +75,7 @@ export const PROGRAMS: Program[] = [
       "Expert Faculty from Kota/Kerala",
       "Doubt Clearing Sessions",
     ],
-    duration: "1-2 Years",
+    duration: "1 Year",
     icon: React.createElement(Heart, { className: "w-6 h-6 text-white" }),
   },
   {
@@ -234,11 +234,12 @@ export const FAQ_QUESTIONS = [
 
 // Contact Information
 export const CONTACT_INFO = {
-  phone: "+91 98765 43210",
-  email: "info@wintouch.edu",
-  admissionEmail: "admissions@wintouch.edu",
-  address: "123 Education City, Kerala, India 673004",
-  campus: "Wintouch Campus, Kerala",
+  phone: "9330 500 400",
+  phoneAlt: "7306 342 571",
+  email: "wintouchacademy@gmail.com",
+  admissionEmail: "wintouchacademy@gmail.com",
+  address: "Wintouch Palm Meadows, Manya, Kasaragod, Kerala - 671321",
+  campus: "Wintouch Palm Meadows, Manya, Kasaragod",
 };
 
 // Footer Links
@@ -271,38 +272,38 @@ export interface TeamMember {
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: 1,
-    name: "Dr. Fathima Zahra",
-    role: "Founder & CEO",
+    name: "Abdul Latheef Uppala",
+    role: "Chairman",
     department: "Leadership",
     image: "/team/member-1.png",
-    bio: "Visionary educationist with 20+ years of experience in transforming girls' education. PhD in Educational Leadership from Oxford.",
+    bio: "Visionary leader guiding Wintouch Academy's mission to provide world-class education rooted in Islamic values.",
     isFeatured: true,
   },
   {
     id: 2,
-    name: "Dr. Ayesha Rahman",
-    role: "Academic Director",
-    department: "Academics",
+    name: "Usthad Khaleel Hudawi",
+    role: "Executive Director",
+    department: "Leadership",
     image: "/team/member-2.png",
-    bio: "Former NEET topper and medical college professor with expertise in designing competitive exam curricula.",
+    bio: "Strategic leader overseeing the academy's operations and ensuring excellence in all aspects of student development.",
     isFeatured: true,
   },
   {
     id: 3,
-    name: "Ms. Mariam Sultana",
-    role: "Head of NEET Program",
+    name: "Dr Basim Gazali",
+    role: "Academic Director",
     department: "Academics",
     image: "/team/member-3.png",
-    bio: "15 years of experience in NEET coaching with a track record of producing top 100 ranks.",
+    bio: "Expert in NEET preparation and academic excellence, leading the curriculum design and teaching methodology.",
     isFeatured: true,
   },
   {
     id: 4,
-    name: "Ms. Zainab Hassan",
-    role: "Chief Administrator",
-    department: "Administration",
+    name: "Mohamed Rashid",
+    role: "CEO",
+    department: "Leadership",
     image: "/team/member-4.png",
-    bio: "Expert in educational administration with focus on creating nurturing residential environments.",
+    bio: "Driving operational excellence and ensuring the highest standards of education and student care.",
     isFeatured: true,
   },
   {

@@ -20,14 +20,14 @@ export default function Hero() {
             <img
               src="/hero.jpg"
               alt="Wintouch Academy students on the field"
-              className="w-full h-full object-cover object-top"
+              className="w-full h-full object-cover object-bottom"
             />
           </div>
 
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#2D1B2E]/30 via-[#2D1B2E]/5 to-transparent" />
 
-          <div className="relative h-full flex items-center justify-center text-center">
+          <div className="relative h-full flex items-center justify-center text-center pt-20">
             <div className="container mx-auto px-6 md:px-10">
               <div className="max-w-3xl mx-auto space-y-6 md:space-y-8 animate-fade-in-up flex flex-col items-center">
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-sm">
