@@ -1,20 +1,35 @@
 "use client";
 
-import { SectionHeading, Card } from "@/app/components/ui";
+import { Card, SectionHeading } from "@/app/components/ui";
 import { PROGRAMS } from "@/app/data/constants";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 export default function Programs() {
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FFFBF0] via-[#f8f4eb] to-[#FFFBF0]" />
+    <section
+      className="py-24 bg-[#FFFBF0] relative overflow-hidden"
+      id="programs"
+    >
+      {/* Decorative Background Pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232D1B2E' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
 
-      {/* Decorative elements */}
-      <div className="absolute top-20 right-0 w-96 h-96 bg-[#8C4B58]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-0 w-80 h-80 bg-[#E8A86C]/5 rounded-full blur-3xl" />
+      {/* Animated Blobs */}
+      <div className="absolute top-40 right-0 w-96 h-96 bg-[#8C4B58]/5 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 left-0 w-80 h-80 bg-[#E8A86C]/5 rounded-full blur-3xl animate-pulse delay-1000" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <SectionHeading subtitle="Academic Excellence" title="Our Programs" />
+        <SectionHeading
+          subtitle="Academic Excellence"
+          title="Our Programs"
+          align="center"
+          className="mb-16"
+        />
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {PROGRAMS.map((program, idx) => (
@@ -56,6 +71,21 @@ export default function Programs() {
               </div>
             </Card>
           ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center animate-fade-in-up delay-300">
+          <p className="text-[#2D1B2E]/60 mb-6 max-w-2xl mx-auto">
+            Not sure which program is right for you? Our academic counselors are
+            here to help you make the best choice for your future.
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-[#E8A86C] text-white rounded-full font-semibold hover:bg-[#d6965c] transition-colors shadow-lg shadow-[#E8A86C]/30 hover:shadow-xl hover:-translate-y-0.5"
+          >
+            Get Academic Counseling
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>

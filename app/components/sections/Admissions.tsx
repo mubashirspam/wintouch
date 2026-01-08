@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+
 import {
   Phone,
   Mail,
@@ -179,33 +179,28 @@ export default function Admissions() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#8C4B58] rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2" />
 
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 relative rounded-2xl overflow-hidden bg-white p-2">
-                <Image
-                  src="/logo.png"
-                  alt="Wintouch Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-white">
-                  Wintouch Academy
-                </h4>
-                <p className="text-white/60 text-sm">
-                  Residential Campus for Girls
-                </p>
-              </div>
-            </div>
-
             <div className="flex flex-wrap items-center gap-6 text-white/80 text-sm">
-              <a
-                href="tel:9330500400"
-                className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
-              >
-                <Phone className="w-4 h-4 text-[#E8A86C]" />
-                <span>9330 500 400</span>
-              </a>
+              <div className="flex items-center gap-4">
+                <a
+                  href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, "")}`}
+                  className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
+                >
+                  <Phone className="w-4 h-4 text-[#E8A86C]" />
+                  <span>{CONTACT_INFO.phone}</span>
+                </a>
+                {CONTACT_INFO.phoneAlt && (
+                  <>
+                    <span className="text-white/30">|</span>
+                    <a
+                      href={`tel:${CONTACT_INFO.phoneAlt.replace(/\s+/g, "")}`}
+                      className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
+                    >
+                      <Phone className="w-4 h-4 text-[#E8A86C]" />
+                      <span>{CONTACT_INFO.phoneAlt}</span>
+                    </a>
+                  </>
+                )}
+              </div>
               <a
                 href={`mailto:${CONTACT_INFO.admissionEmail}`}
                 className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
@@ -215,7 +210,7 @@ export default function Admissions() {
               </a>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-[#E8A86C]" />
-                <span>Manya, Kasaragod</span>
+                <span>{CONTACT_INFO.address}</span>
               </div>
             </div>
           </div>

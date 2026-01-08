@@ -1,5 +1,5 @@
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
-import { Programs, PageHeader, Testimonials } from "@/app/components/sections";
+import { Programs, PageHeader, } from "@/app/components/sections";
 
 export const metadata = {
   title: "Programs - Wintouch Academy",
@@ -20,7 +20,7 @@ export default function ProgramsPage() {
           variant="primary"
         />
         <Programs />
-        <Testimonials />
+        {/* <Testimonials /> */}
       </main>
 
       <Footer />
