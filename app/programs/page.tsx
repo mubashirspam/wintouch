@@ -1,5 +1,5 @@
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
-import { Programs, PageHeader, } from "@/app/components/sections";
+import { Programs } from "@/app/components/sections";
 
 export const metadata = {
   title: "Programs - Wintouch Academy",
@@ -14,11 +14,6 @@ export default function ProgramsPage() {
       <Navbar />
 
       <main className="animate-fade-in-up">
-        <PageHeader
-          title="Academic Programs"
-          subtitle="Structured for success. Designed for focus."
-          variant="primary"
-        />
         <Programs />
         {/* <Testimonials /> */}
       </main>

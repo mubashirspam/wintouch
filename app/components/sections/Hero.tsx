@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/app/components/ui";
+import { WHATSAPP_LINK } from "@/app/data/constants";
 
 export default function Hero() {
   const scrollToContent = () => {
@@ -42,19 +43,25 @@ export default function Hero() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto">
-                  <Link href="/admissions" className="w-full sm:w-auto">
-                    <Button className="w-full sm:w-auto bg-[#9A4B5A] justify-center">
-                      Apply Now <ArrowRight className="ml-2 w-4 h-4" />
+                  <Link href="/programs" className="w-full sm:w-auto">
+                    <Button className="w-full sm:w-auto bg-[#8C4B58] hover:bg-[#7A3F4D] justify-center">
+                      Explore Programs <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   </Link>
-                  <Link href="/programs" className="w-full sm:w-auto">
+                  <a
+                    href={WHATSAPP_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto"
+                  >
                     <Button
                       variant="secondary"
-                      className="bg-[#E4A068] text-white border-white/30 hover:bg-white/30 w-full sm:w-auto justify-center backdrop-blur-md"
+                      className="bg-[#E8A86C] hover:bg-[#2D1B2E] text-white border border-white/30 w-full sm:w-auto justify-center backdrop-blur-md flex items-center gap-2"
                     >
-                      Explore Programs
+                      <MessageCircle className="w-4 h-4" />
+                      Chat with Us
                     </Button>
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -62,7 +69,7 @@ export default function Hero() {
 
           <button
             onClick={scrollToContent}
-            className="absolute bottom-[0px] right-6  cursor-pointer"
+            className="absolute bottom-[0px] right-6 cursor-pointer"
             aria-label="Scroll down"
           >
             <img src="./scrolldown.svg" alt="" />

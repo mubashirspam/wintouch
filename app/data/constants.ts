@@ -63,6 +63,10 @@ export const NAV_LINKS: NavLink[] = [
   { id: "admissions", label: "Admissions" },
 ];
 
+// WhatsApp Link
+export const WHATSAPP_LINK =
+  "https://wa.me/919330500400?text=Hi%2C%20I%20am%20interested%20in%20Wintouch%20Academy";
+
 // Programs Data
 export const PROGRAMS: Program[] = [
   {
