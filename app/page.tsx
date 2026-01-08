@@ -25,11 +25,12 @@ export default function HomePage() {
       <main>
         <Hero />
         <About />
+        <ImageGallery />
         <Programs />
         {/* <UniqueFeatures /> */}
         <Team />
         {/* <Testimonials /> */}
-        <ImageGallery />
+
         <Admissions />
         <ScholarshipForm />
         <FAQ />

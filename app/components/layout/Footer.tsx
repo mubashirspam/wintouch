@@ -169,7 +169,7 @@ export default function Footer() {
                 alt="Wintouch"
                 width={40}
                 height={40}
-                className="brightness-0 invert"
+                className=""
               />
               <span className="text-2xl font-bold tracking-tight">
                 Wintouch

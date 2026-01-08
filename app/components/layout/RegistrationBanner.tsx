@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, GraduationCap, ArrowRight, Star } from "lucide-react";
+import {
+  Sparkles,
+  GraduationCap,
+  ArrowRight,
+  Star,
+  MessageCircle,
+  Phone,
+} from "lucide-react";
+import { WHATSAPP_LINK } from "@/app/data/constants";
 
 const BannerContent = () => (
   <div className="flex items-center gap-8 px-4">
@@ -37,6 +45,24 @@ const BannerContent = () => (
         Register Now
       </span>
       <ArrowRight className="w-4 h-4" />
+    </div>
+
+    <span className="text-[#E8A86C] text-lg">•</span>
+
+    <div className="flex items-center gap-2">
+      <Phone className="w-4 h-4 text-[#E8A86C]" />
+      <span className="text-sm font-medium tracking-wide uppercase">
+        Call: 7306 342 571
+      </span>
+    </div>
+
+    <span className="text-[#E8A86C] text-lg">•</span>
+
+    <div className="flex items-center gap-2">
+      <MessageCircle className="w-4 h-4 text-[#E8A86C]" />
+      <span className="text-sm font-medium tracking-wide uppercase">
+        WhatsApp: 9330 500 400
+      </span>
     </div>
 
     <span className="text-[#E8A86C] text-lg">•</span>

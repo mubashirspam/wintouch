@@ -174,44 +174,81 @@ export default function Admissions() {
           ))}
         </div>
 
-        {/* Contact Info Bar */}
-        <div className="max-w-4xl mx-auto bg-[#2D1B2E] rounded-3xl p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#8C4B58] rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2" />
+        {/* Contact Info CTA */}
+        <div className="max-w-5xl mx-auto bg-gradient-to-br from-[#2D1B2E] to-[#4A2F4A] rounded-3xl p-8 md:p-10 relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-72 h-72 bg-[#E8A86C]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#8C4B58]/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex flex-wrap items-center gap-6 text-white/80 text-sm">
-              <div className="flex items-center gap-4">
-                <a
-                  href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, "")}`}
-                  className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-[#E8A86C]" />
-                  <span>{CONTACT_INFO.phone}</span>
-                </a>
-                {CONTACT_INFO.phoneAlt && (
-                  <>
-                    <span className="text-white/30">|</span>
-                    <a
-                      href={`tel:${CONTACT_INFO.phoneAlt.replace(/\s+/g, "")}`}
-                      className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
-                    >
-                      <Phone className="w-4 h-4 text-[#E8A86C]" />
-                      <span>{CONTACT_INFO.phoneAlt}</span>
-                    </a>
-                  </>
-                )}
-              </div>
+          <div className="relative z-10">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Ready to Begin Your Journey?
+              </h3>
+              <p className="text-white/70">
+                Contact us today for admissions or any queries
+              </p>
+            </div>
+            {/* Contact Options Grid */}
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              {/* Phone */}
+              <a
+                href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, "")}`}
+                className="group flex flex-col items-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/20 hover:border-[#E8A86C]/30 transition-all duration-300"
+              >
+                <div className="p-3 bg-[#E8A86C]/20 rounded-full group-hover:bg-[#E8A86C]/30 transition-colors">
+                  <Phone className="w-6 h-6 text-[#E8A86C]" />
+                </div>
+                <div className="text-center">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                    Call Us
+                  </p>
+                  <p className="text-white font-semibold">
+                    {CONTACT_INFO.phone}
+                  </p>
+                  {CONTACT_INFO.phoneAlt && (
+                    <p className="text-white/80 text-sm">
+                      {CONTACT_INFO.phoneAlt}
+                    </p>
+                  )}
+                </div>
+              </a>
+
+              {/* Email */}
               <a
                 href={`mailto:${CONTACT_INFO.admissionEmail}`}
-                className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
+                className="group flex flex-col items-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/20 hover:border-[#E8A86C]/30 transition-all duration-300"
               >
-                <Mail className="w-4 h-4 text-[#E8A86C]" />
-                <span>{CONTACT_INFO.admissionEmail}</span>
+                <div className="p-3 bg-[#E8A86C]/20 rounded-full group-hover:bg-[#E8A86C]/30 transition-colors">
+                  <Mail className="w-6 h-6 text-[#E8A86C]" />
+                </div>
+                <div className="text-center">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                    Email Us
+                  </p>
+                  <p className="text-white font-semibold text-sm break-all">
+                    {CONTACT_INFO.admissionEmail}
+                  </p>
+                </div>
               </a>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#E8A86C]" />
-                <span>{CONTACT_INFO.address}</span>
+
+              {/* Location */}
+              <div className="group flex flex-col items-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10">
+                <div className="p-3 bg-[#E8A86C]/20 rounded-full">
+                  <MapPin className="w-6 h-6 text-[#E8A86C]" />
+                </div>
+                <div className="text-center">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                    Visit Us
+                  </p>
+                  <p className="text-white/90 text-sm">{CONTACT_INFO.campus}</p>
+                </div>
               </div>
+            </div>{" "}
+            {/* Additional Info */}
+            <div className="text-center pt-4 border-t border-white/10">
+              <p className="text-white/60 text-sm">📍 {CONTACT_INFO.address}</p>
             </div>
           </div>
         </div>
