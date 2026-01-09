@@ -38,10 +38,10 @@ const KERALA_DISTRICTS = [
 ];
 
 const COURSE_OPTIONS = [
-  { value: "repeater", label: "Repeater (Currently Plus Two std)" },
+  { value: "repeater", label: "Repeaters Course (For Students in Class 12)" },
   {
     value: "integrated",
-    label: "Integrated +1+2 with Coaching (10th std currently)",
+    label: "Integrated Plus One & Two (For Students in Class 10)",
   },
 ];
 
