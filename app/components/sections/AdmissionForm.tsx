@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import {
   User,
-  GraduationCap,
   School,
   Phone,
   MessageCircle,
@@ -14,12 +13,9 @@ import {
   AlertCircle,
   Loader2,
   Sparkles,
-  Award,
-  Copy,
   BookOpen,
 } from "lucide-react";
 
-// Kerala Districts
 const KERALA_DISTRICTS = [
   "Kasaragod",
   "Kannur",
@@ -37,10 +33,17 @@ const KERALA_DISTRICTS = [
   "Thiruvananthapuram",
 ];
 
+const KARNATAKA_DISTRICTS = ["Bangalore", "Mysore", "Hubballi", "Mangalore"];
+
+const INDIAN_STATES = ["Kerala", "Karnataka"];
+
 const COURSE_OPTIONS = [
-  { value: "repeater", label: "Repeaters Course (For Students in Class 12)" },
   {
-    value: "integrated",
+    value: "admission_repeaters_course",
+    label: "Repeaters Course (For Students in Class 12)",
+  },
+  {
+    value: "admission_integrated_plus_one_plus_two",
     label: "Integrated Plus One & Two (For Students in Class 10)",
   },
 ];
@@ -59,45 +62,48 @@ const STREAM_OPTIONS = [
 ];
 
 interface FormData {
-  studentName: string;
   courseType: string;
-  stream?: string;
-  currentSchool: string;
-  contactNumber: string;
-  whatsappNumber: string;
+  name: string;
+  school: string;
+  contactNo: string;
+  whatsappNo: string;
   place: string;
+  state: string;
   district: string;
+  stream?: string;
 }
 
 interface FormErrors {
-  studentName?: string;
   courseType?: string;
-  stream?: string;
-  currentSchool?: string;
-  contactNumber?: string;
-  whatsappNumber?: string;
+  name?: string;
+  school?: string;
+  contactNo?: string;
+  whatsappNo?: string;
   place?: string;
+  state?: string;
   district?: string;
+  stream?: string;
 }
 
-interface ScholarshipFormProps {
+interface AdmissionFormProps {
   onSuccess?: () => void;
-  variant?: "embedded" | "modal";
+  variant?: "embedded" | "standalone";
 }
 
-export default function ScholarshipForm({
+export default function AdmissionForm({
   onSuccess,
   variant = "embedded",
-}: ScholarshipFormProps) {
+}: AdmissionFormProps) {
   const [formData, setFormData] = useState<FormData>({
-    studentName: "",
     courseType: "",
-    stream: "",
-    currentSchool: "",
-    contactNumber: "",
-    whatsappNumber: "",
+    name: "",
+    school: "",
+    contactNo: "",
+    whatsappNo: "",
     place: "",
+    state: "",
     district: "",
+    stream: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -106,73 +112,64 @@ export default function ScholarshipForm({
     "idle" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [copyWhatsapp, setCopyWhatsapp] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Auto-fill WhatsApp from Contact Number
-  const handleCopyWhatsapp = () => {
-    if (formData.contactNumber) {
-      setFormData((prev) => ({
-        ...prev,
-        whatsappNumber: prev.contactNumber,
-      }));
-      setCopyWhatsapp(true);
-      setTimeout(() => setCopyWhatsapp(false), 2000);
-    }
-  };
-
-  // Validate phone number
   const isValidPhone = (phone: string) => {
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(phone.replace(/\s/g, ""));
   };
 
-  // Validate form
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.studentName.trim()) {
-      newErrors.studentName = "Student name is required";
+    if (!formData.name.trim()) {
+      newErrors.name = "Student name is required";
     }
 
-    if (!formData.courseType) {
-      newErrors.courseType = "Please select your course";
+    if (!formData.school.trim()) {
+      newErrors.school = "School name is required";
     }
 
-    if (formData.courseType === "repeater" && !formData.stream) {
-      newErrors.stream = "Please select your stream";
+    if (!formData.contactNo) {
+      newErrors.contactNo = "Contact number is required";
+    } else if (!isValidPhone(formData.contactNo)) {
+      newErrors.contactNo = "Please enter a valid 10-digit phone number";
     }
 
-    if (!formData.currentSchool.trim()) {
-      newErrors.currentSchool = "School name is required";
-    }
-
-    if (!formData.contactNumber) {
-      newErrors.contactNumber = "Contact number is required";
-    } else if (!isValidPhone(formData.contactNumber)) {
-      newErrors.contactNumber = "Please enter a valid 10-digit phone number";
-    }
-
-    if (!formData.whatsappNumber) {
-      newErrors.whatsappNumber = "WhatsApp number is required";
-    } else if (!isValidPhone(formData.whatsappNumber)) {
-      newErrors.whatsappNumber = "Please enter a valid 10-digit phone number";
+    if (!formData.whatsappNo) {
+      newErrors.whatsappNo = "WhatsApp number is required";
+    } else if (!isValidPhone(formData.whatsappNo)) {
+      newErrors.whatsappNo = "Please enter a valid 10-digit phone number";
     }
 
     if (!formData.place.trim()) {
       newErrors.place = "Place is required";
     }
 
+    if (!formData.courseType) {
+      newErrors.courseType = "Please select a course";
+    }
+
+    if (!formData.state) {
+      newErrors.state = "Please select your state";
+    }
+
     if (!formData.district) {
       newErrors.district = "Please select your district";
+    }
+
+    if (
+      formData.courseType === "admission_repeaters_course" &&
+      !formData.stream
+    ) {
+      newErrors.stream = "Please select your stream";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -185,36 +182,48 @@ export default function ScholarshipForm({
     setErrorMessage("");
 
     try {
-      const response = await fetch("/api/scholarship", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.studentName,
-          course: formData.courseType,
-          stream: formData.stream,
-          school: formData.currentSchool,
-          phone: formData.contactNumber,
-          whatsapp: formData.whatsappNumber,
-          place: formData.place,
-          district: formData.district,
-        }),
-      });
+      const payload: Record<string, string> = {
+        type: formData.courseType,
+        name: formData.name,
+        school: formData.school,
+        contactNo: formData.contactNo,
+        whatsappNo: formData.whatsappNo,
+        place: formData.place,
+        district: formData.district,
+      };
+
+      if (
+        formData.courseType === "admission_repeaters_course" &&
+        formData.stream
+      ) {
+        payload.stream = formData.stream;
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/leads/admissions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         setSubmitStatus("success");
         setFormData({
-          studentName: "",
           courseType: "",
-          stream: "",
-          currentSchool: "",
-          contactNumber: "",
-          whatsappNumber: "",
+          name: "",
+          school: "",
+          contactNo: "",
+          whatsappNo: "",
           place: "",
+          state: "",
           district: "",
+          stream: "",
         });
         onSuccess?.();
       } else {
@@ -233,7 +242,6 @@ export default function ScholarshipForm({
     }
   };
 
-  // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -241,16 +249,25 @@ export default function ScholarshipForm({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      // Reset stream if course type changes
-      ...(name === "courseType" && value !== "repeater" ? { stream: "" } : {}),
+      ...(name === "courseType" && value !== "admission_repeaters_course"
+        ? { stream: "" }
+        : {}),
+      ...(name === "state" ? { district: "" } : {}),
     }));
-    // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
-  // Reset form after success message
+  const handleCopyWhatsapp = () => {
+    if (formData.contactNo) {
+      setFormData((prev) => ({
+        ...prev,
+        whatsappNo: prev.contactNo,
+      }));
+    }
+  };
+
   useEffect(() => {
     if (submitStatus === "success") {
       const timer = setTimeout(() => {
@@ -275,7 +292,6 @@ export default function ScholarshipForm({
           : ""
       }`}
     >
-      {/* Background decorations for embedded version */}
       {isEmbedded && (
         <>
           <div className="absolute top-0 left-0 w-96 h-96 bg-[#E8A86C]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
@@ -288,23 +304,17 @@ export default function ScholarshipForm({
           isEmbedded ? "container mx-auto px-4" : ""
         }`}
       >
-        {/* Header for embedded version */}
         {isEmbedded && (
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#E8A86C] text-[#2D1B2E] rounded-full text-sm font-bold mb-4">
-              <Award className="w-4 h-4" />
-              NEET Scholarship Exam 2025-26
-            </div>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-              Register for Scholarship Exam
+              Admission Registration
             </h2>
             <p className="text-white/70 text-base max-w-2xl mx-auto">
-              Win up to ₹50 Lakhs in scholarships!
+              Choose your course and complete the admission process
             </p>
           </div>
         )}
 
-        {/* Form Card */}
         <div
           className={`max-w-2xl mx-auto ${
             isEmbedded
@@ -312,7 +322,6 @@ export default function ScholarshipForm({
               : "p-2"
           }`}
         >
-          {/* Success Message */}
           {submitStatus === "success" && (
             <div className="mb-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl animate-fade-in-up">
               <div className="flex items-center gap-3">
@@ -324,14 +333,13 @@ export default function ScholarshipForm({
                     Registration Successful! 🎉
                   </h3>
                   <p className="text-green-600 text-sm">
-                    We&apos;ll contact you soon with exam details.
+                    We&apos;ll contact you soon with admission details.
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Error Message */}
           {submitStatus === "error" && (
             <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl animate-fade-in-up">
               <div className="flex items-center gap-3">
@@ -349,42 +357,14 @@ export default function ScholarshipForm({
           )}
 
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            {/* Student Name */}
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <User className="w-4 h-4 text-[#8C4B58]" />
-                Student Name *
-              </label>
-              <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <input
-                  type="text"
-                  name="studentName"
-                  value={formData.studentName}
-                  onChange={handleChange}
-                  placeholder="Enter student's full name"
-                  autoComplete="name"
-                  className={`${inputBaseClass} ${
-                    errors.studentName ? errorInputClass : normalInputClass
-                  }`}
-                />
-              </div>
-              {errors.studentName && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.studentName}
-                </p>
-              )}
-            </div>
-
             {/* Course Type */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <GraduationCap className="w-4 h-4 text-[#8C4B58]" />
+                <BookOpen className="w-4 h-4 text-[#8C4B58]" />
                 Choose Course *
               </label>
               <div className="relative">
-                <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                 <select
                   name="courseType"
                   value={formData.courseType}
@@ -424,8 +404,34 @@ export default function ScholarshipForm({
               )}
             </div>
 
-            {/* Stream (only for Repeater) */}
-            {formData.courseType === "repeater" && (
+            <div className="space-y-1.5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                <User className="w-4 h-4 text-[#8C4B58]" />
+                Student Name *
+              </label>
+              <div className="relative">
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter student's full name"
+                  autoComplete="name"
+                  className={`${inputBaseClass} ${
+                    errors.name ? errorInputClass : normalInputClass
+                  }`}
+                />
+              </div>
+              {errors.name && (
+                <p className="text-red-500 text-xs flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.name}
+                </p>
+              )}
+            </div>
+
+            {formData.courseType === "admission_repeaters_course" && (
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                   <BookOpen className="w-4 h-4 text-[#8C4B58]" />
@@ -473,7 +479,6 @@ export default function ScholarshipForm({
               </div>
             )}
 
-            {/* Current School */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                 <School className="w-4 h-4 text-[#8C4B58]" />
@@ -483,27 +488,25 @@ export default function ScholarshipForm({
                 <School className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                 <input
                   type="text"
-                  name="currentSchool"
-                  value={formData.currentSchool}
+                  name="school"
+                  value={formData.school}
                   onChange={handleChange}
                   placeholder="Enter your school name"
                   autoComplete="organization"
                   className={`${inputBaseClass} ${
-                    errors.currentSchool ? errorInputClass : normalInputClass
+                    errors.school ? errorInputClass : normalInputClass
                   }`}
                 />
               </div>
-              {errors.currentSchool && (
+              {errors.school && (
                 <p className="text-red-500 text-xs flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
-                  {errors.currentSchool}
+                  {errors.school}
                 </p>
               )}
             </div>
 
-            {/* Contact & WhatsApp - Side by Side */}
             <div className="grid md:grid-cols-2 gap-4">
-              {/* Contact Number */}
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                   <Phone className="w-4 h-4 text-[#8C4B58]" />
@@ -513,40 +516,38 @@ export default function ScholarshipForm({
                   <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                   <input
                     type="tel"
-                    name="contactNumber"
-                    value={formData.contactNumber}
+                    name="contactNo"
+                    value={formData.contactNo}
                     onChange={handleChange}
                     placeholder="10-digit phone"
                     autoComplete="tel"
                     maxLength={10}
                     className={`${inputBaseClass} ${
-                      errors.contactNumber ? errorInputClass : normalInputClass
+                      errors.contactNo ? errorInputClass : normalInputClass
                     }`}
                   />
                 </div>
-                {errors.contactNumber && (
+                {errors.contactNo && (
                   <p className="text-red-500 text-xs flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.contactNumber}
+                    {errors.contactNo}
                   </p>
                 )}
               </div>
 
-              {/* WhatsApp Number */}
               <div className="space-y-1.5">
                 <label className="flex items-center justify-between text-sm font-semibold text-[#2D1B2E]">
                   <span className="flex items-center gap-2">
                     <MessageCircle className="w-4 h-4 text-[#8C4B58]" />
                     WhatsApp *
                   </span>
-                  {formData.contactNumber && (
+                  {formData.contactNo && (
                     <button
                       type="button"
                       onClick={handleCopyWhatsapp}
-                      className="flex items-center gap-1 text-xs text-[#8C4B58] hover:text-[#E8A86C] transition-colors"
+                      className="text-xs text-[#8C4B58] hover:text-[#E8A86C] transition-colors"
                     >
-                      <Copy className="w-3 h-3" />
-                      {copyWhatsapp ? "Copied!" : "Same as contact"}
+                      Same as contact
                     </button>
                   )}
                 </label>
@@ -554,29 +555,27 @@ export default function ScholarshipForm({
                   <MessageCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                   <input
                     type="tel"
-                    name="whatsappNumber"
-                    value={formData.whatsappNumber}
+                    name="whatsappNo"
+                    value={formData.whatsappNo}
                     onChange={handleChange}
                     placeholder="WhatsApp number"
                     autoComplete="tel"
                     maxLength={10}
                     className={`${inputBaseClass} ${
-                      errors.whatsappNumber ? errorInputClass : normalInputClass
+                      errors.whatsappNo ? errorInputClass : normalInputClass
                     }`}
                   />
                 </div>
-                {errors.whatsappNumber && (
+                {errors.whatsappNo && (
                   <p className="text-red-500 text-xs flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.whatsappNumber}
+                    {errors.whatsappNo}
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Place & District - Side by Side */}
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* Place */}
+            <div className="grid md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                   <MapPin className="w-4 h-4 text-[#8C4B58]" />
@@ -604,7 +603,52 @@ export default function ScholarshipForm({
                 )}
               </div>
 
-              {/* District */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                  <MapPin className="w-4 h-4 text-[#8C4B58]" />
+                  State *
+                </label>
+                <div className="relative">
+                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    className={`${inputBaseClass} appearance-none cursor-pointer ${
+                      errors.state ? errorInputClass : normalInputClass
+                    }`}
+                  >
+                    <option value="">Select state</option>
+                    {INDIAN_STATES.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-[#8C4B58]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {errors.state && (
+                  <p className="text-red-500 text-xs flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.state}
+                  </p>
+                )}
+              </div>
+
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                   <Map className="w-4 h-4 text-[#8C4B58]" />
@@ -621,7 +665,10 @@ export default function ScholarshipForm({
                     }`}
                   >
                     <option value="">Select district</option>
-                    {KERALA_DISTRICTS.map((district) => (
+                    {(formData.state === "Karnataka"
+                      ? KARNATAKA_DISTRICTS
+                      : KERALA_DISTRICTS
+                    ).map((district) => (
                       <option key={district} value={district}>
                         {district}
                       </option>
@@ -652,7 +699,6 @@ export default function ScholarshipForm({
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -666,16 +712,15 @@ export default function ScholarshipForm({
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  Register for Scholarship Exam
+                  Register for Admission
                   <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
 
-            {/* Privacy Note */}
             <p className="text-center text-xs text-gray-500 mt-3">
-              Your information is secure and will only be used for scholarship
-              exam registration.
+              Your information is secure and will only be used for admission
+              registration.
             </p>
           </form>
         </div>

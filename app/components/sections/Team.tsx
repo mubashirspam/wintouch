@@ -65,11 +65,11 @@ export default function Team() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#2D1B2E] via-transparent to-transparent opacity-60" />
 
                   {/* Role Badge */}
-                  <div className="absolute top-4 left-4">
+                  {/* <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-[#E8A86C]/90 backdrop-blur-sm rounded-full text-white text-xs font-semibold">
                       {member.department}
                     </span>
-                  </div>
+                  </div> */}
 
                   {/* Social Links - Appear on Hover */}
                   <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">

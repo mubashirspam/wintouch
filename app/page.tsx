@@ -7,7 +7,7 @@ import {
   FAQ,
   ImageGallery,
   Team,
-  ScholarshipForm,
+  AdmissionForm,
 } from "@/app/components/sections";
 
 export const metadata = {
@@ -32,7 +32,7 @@ export default function HomePage() {
         {/* <Testimonials /> */}
 
         <Admissions />
-        <ScholarshipForm />
+        <AdmissionForm />
         <FAQ />
       </main>
 
