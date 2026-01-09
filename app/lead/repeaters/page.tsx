@@ -94,19 +94,13 @@ export default function RepeatersLeadPage() {
         <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Top Bar - Logo & Urgency */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-14 h-14 md:w-16 md:h-16 relative bg-white rounded-xl p-2">
-                <Image
-                  src="/logo.svg"
-                  alt="Wintouch Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="text-white">
-                <p className="font-bold text-lg md:text-xl">WINTOUCH</p>
-                <p className="text-xs text-white/70">ACADEMY</p>
-              </div>
+            <div className="w-32 h-14 md:w-40 md:h-16 relative">
+              <Image
+                src="/logo_white.svg"
+                alt="Wintouch Logo"
+                fill
+                className="object-contain"
+              />
             </div>
 
             {/* Urgency Badge */}
@@ -132,15 +126,16 @@ export default function RepeatersLeadPage() {
                 <p className="text-[#E8A86C] text-sm md:text-base font-medium tracking-wider uppercase">
                   ★ Residential Campus for Girls ★
                 </p>
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-tight">
-                  <span className="block text-white">കാട്രസ്ടാർ</span>
-                  <span className="block text-[#E8A86C]">ഇനി നീറ്റിനായി</span>
-                  <span className="block text-white/90">തേക്കൊട്ടോടണ്ട</span>
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-tight font-chilanka">
+                  <span className="block text-white">ഡോക്ടറാകാം</span>
+                  <span className="block text-[#E8A86C]">
+                    മികച്ച നീറ്റ് പരിശീലനത്തിലൂടെ
+                  </span>
+                  <span className="block text-white/90">
+                    ഇനി കാസർഗോഡ് തന്നെ
+                  </span>
                 </h1>
-                <p className="text-xl md:text-2xl lg:text-3xl font-bold text-white/90 mt-4">
-                  <span className="text-[#E8A86C]">കാസർഗോഡ്</span> തന്നെ
-                  പഠിക്കാം
-                </p>
+                {/* Removed the redundant sub-heading as it's now part of the main heading */}
               </div>
 
               {/* English Subtitle */}

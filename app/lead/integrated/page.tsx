@@ -88,19 +88,13 @@ export default function IntegratedLeadPage() {
         <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Top Bar - Logo & Urgency */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-14 h-14 md:w-16 md:h-16 relative">
-                <Image
-                  src="/logo.svg"
-                  alt="Wintouch Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="text-white">
-                <p className="font-bold text-lg md:text-xl">WINTOUCH</p>
-                <p className="text-xs text-white/70">ACADEMY</p>
-              </div>
+            <div className="w-32 h-14 md:w-40 md:h-16 relative">
+              <Image
+                src="/logo_white.svg"
+                alt="Wintouch Logo"
+                fill
+                className="object-contain"
+              />
             </div>
 
             {/* Urgency Badge */}

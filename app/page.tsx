@@ -2,10 +2,7 @@ import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
 import {
   Hero,
   About,
-  VisionMission,
   Programs,
-  UniqueFeatures,
-  Testimonials,
   Admissions,
   FAQ,
   ImageGallery,
@@ -28,12 +25,12 @@ export default function HomePage() {
       <main>
         <Hero />
         <About />
-        <VisionMission />
-        <Programs />
-        <UniqueFeatures />
-        <Team />
-        <Testimonials />
         <ImageGallery />
+        <Programs />
+        {/* <UniqueFeatures /> */}
+        <Team />
+        {/* <Testimonials /> */}
+
         <Admissions />
         <ScholarshipForm />
         <FAQ />

@@ -1,10 +1,5 @@
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
-import {
-  UniqueFeatures,
-  ImageGallery,
-  PageHeader,
-  Testimonials,
-} from "@/app/components/sections";
+import { ImageGallery } from "@/app/components/sections";
 
 export const metadata = {
   title: "Campus Life - Wintouch Academy",
@@ -18,14 +13,9 @@ export default function CampusLifePage() {
       <Navbar />
 
       <main className="animate-fade-in-up">
-        <PageHeader
-          title="Life at Wintouch"
-          subtitle="A home away from home."
-          variant="accent"
-        />
-        <UniqueFeatures />
+        {/* <UniqueFeatures /> */}
         <ImageGallery />
-        <Testimonials />
+        {/* <Testimonials /> */}
       </main>
 
       <Footer />

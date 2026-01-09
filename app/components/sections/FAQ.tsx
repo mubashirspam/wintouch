@@ -28,7 +28,7 @@ export default function FAQ() {
             <HelpCircle className="w-8 h-8 text-[#E8A86C]" />
           </div>
           <SectionHeading
-            subtitle="Common Questions"
+            subtitle="FAQ"
             title="Everything You Need to Know"
             align="center"
           />

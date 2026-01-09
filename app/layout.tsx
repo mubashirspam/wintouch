@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Space_Grotesk,
+  Plus_Jakarta_Sans,
+  Noto_Serif_Malayalam,
+  Anek_Malayalam,
+  Chilanka,
+} from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -12,6 +18,25 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
   weight: ["400", "500", "600"],
+});
+
+// Malayalam Fonts
+const notoSerifMalayalam = Noto_Serif_Malayalam({
+  subsets: ["malayalam", "latin"],
+  variable: "--font-noto-malayalam",
+  weight: ["400", "600", "700"],
+});
+
+const anekMalayalam = Anek_Malayalam({
+  subsets: ["malayalam", "latin"],
+  variable: "--font-anek-malayalam",
+  weight: ["400", "600", "700"],
+});
+
+const chilanka = Chilanka({
+  subsets: ["malayalam", "latin"],
+  variable: "--font-chilanka",
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -215,7 +240,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${jakarta.variable} bg-[#FFFBF0] text-[#2D1B2E] antialiased`}
+        className={`${spaceGrotesk.variable} ${jakarta.variable} ${notoSerifMalayalam.variable} ${anekMalayalam.variable} ${chilanka.variable} bg-[#FFFBF0] text-[#2D1B2E] antialiased`}
       >
         {children}
       </body>

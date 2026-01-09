@@ -24,22 +24,33 @@ export default function Footer() {
               </p>
 
               <div className="grid sm:grid-cols-2 gap-6">
-                <a
-                  href={`tel:${CONTACT_INFO.phone}`}
-                  className="flex items-center gap-4 group"
-                >
+                <div className="flex items-center gap-4 group">
                   <div className="p-3 bg-white/10 rounded-xl group-hover:bg-[#8C4B58] transition-colors">
                     <Phone className="w-5 h-5 text-[#E8A86C] group-hover:text-white transition-colors" />
                   </div>
-                  <div>
+                  <div className="flex flex-col gap-1">
                     <p className="text-xs text-white/50 uppercase tracking-wider">
                       Call Us
                     </p>
-                    <p className="font-semibold group-hover:text-[#E8A86C] transition-colors">
+                    <a
+                      href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, "")}`}
+                      className="font-semibold group-hover:text-[#E8A86C] transition-colors"
+                    >
                       {CONTACT_INFO.phone}
-                    </p>
+                    </a>
+                    {CONTACT_INFO.phoneAlt && (
+                      <a
+                        href={`tel:${CONTACT_INFO.phoneAlt.replace(
+                          /\s+/g,
+                          ""
+                        )}`}
+                        className="font-semibold text-white/80 hover:text-[#E8A86C] transition-colors"
+                      >
+                        {CONTACT_INFO.phoneAlt}
+                      </a>
+                    )}
                   </div>
-                </a>
+                </div>
 
                 <a
                   href={`mailto:${CONTACT_INFO.email}`}
@@ -111,7 +122,7 @@ export default function Footer() {
             {/* Google Maps */}
             <div className="relative h-[350px] rounded-2xl overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.123456789012!2d75.7873!3d11.2588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDE1JzMxLjciTiA3NcKwNDcnMTQuMyJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3897.0456789!2d75.0489154!3d12.5547041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba48373be155077%3A0x865e2a903faba7ce!2sWintouch%20International%20School!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -124,9 +135,7 @@ export default function Footer() {
 
               {/* Map Overlay */}
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                  CONTACT_INFO.address
-                )}`}
+                href="https://www.google.com/maps/place/Wintouch+International+School/@12.5547041,75.0490154,9z/data=!4m6!3m5!1s0x3ba48373be155077:0x865e2a903faba7ce!8m2!3d12.5544625!4d75.0491719!16s%2Fg%2F11nn32kkrf?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute bottom-4 left-4 right-4 bg-[#2D1B2E]/95 backdrop-blur-sm rounded-xl p-4 flex items-center gap-3 hover:bg-[#2D1B2E] transition-colors group"
@@ -160,7 +169,7 @@ export default function Footer() {
                 alt="Wintouch"
                 width={40}
                 height={40}
-                className="brightness-0 invert"
+                className=""
               />
               <span className="text-2xl font-bold tracking-tight">
                 Wintouch

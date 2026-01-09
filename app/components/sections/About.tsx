@@ -1,65 +1,208 @@
 "use client";
 
-import Image from "next/image";
-import { Flower } from "lucide-react";
-import { SectionHeading } from "@/app/components/ui";
-import { STATS } from "@/app/data/constants";
+import { useEffect, useRef, useState } from "react";
+import { Eye, Target, Award, Diamond, Moon, Zap } from "lucide-react";
+
+const CORE_VALUES = [
+  {
+    label: "Excellence",
+    description:
+      "Striving for the highest standards in academics and character.",
+    icon: Award,
+  },
+  {
+    label: "Integrity",
+    description:
+      "Upholding honesty and strong moral principles in all actions.",
+    icon: Diamond,
+  },
+  {
+    label: "Faith",
+    description: "Nurturing spiritual growth and connection with the Creator.",
+    icon: Moon,
+  },
+  {
+    label: "Empowerment",
+    description:
+      "Equipping students with confidence to face future challenges.",
+    icon: Zap,
+  },
+];
+
+function useInView(threshold = 0.1) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsInView(true);
+      },
+      { threshold }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isInView };
+}
 
 export default function About() {
+  const { ref: sectionRef, isInView } = useInView(0.1);
+
   return (
-    <section className="py-24 bg-[#FFFBF0] relative overflow-hidden">
-      {/* Animated decorative elements */}
-      <div className="absolute top-10 left-10 w-64 h-64 bg-[#E8A86C]/10 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-10 right-10 w-80 h-80 bg-[#8C4B58]/10 rounded-full blur-3xl animate-float-delayed" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-[#E8A86C]/5 to-[#8C4B58]/5 rounded-full blur-3xl" />
+    <section
+      ref={sectionRef}
+      className="py-20 md:py-28 bg-[#FFFBF0] relative overflow-hidden"
+      id="about"
+    >
+      {/* Subtle Background Elements */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#E8A86C]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#8C4B58]/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/3" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
-          {/* Top Icon */}
-          <div className="mb-8 animate-fade-in-up">
-            <Flower className="w-12 h-12 text-[#2D1B2E] stroke-[1.5]" />
+        {/* Section Heading */}
+        <div
+          className={`text-center mb-12 md:mb-16 transition-all duration-700 ${
+            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#8C4B58]/10 rounded-full mb-4">
+            <span className="w-2 h-2 bg-[#8C4B58] rounded-full animate-pulse" />
+            <span className="text-xs font-bold text-[#8C4B58] uppercase tracking-widest">
+              Who We Are
+            </span>
           </div>
-
-          {/* Heading & Text */}
-          <SectionHeading
-            subtitle="Our Philosophy"
-            title="Rooted in Faith, Ready for the Future"
-            align="center"
-            className="mb-8"
-          />
-
-          <div className="space-y-6 text-lg text-[#2D1B2E]/80 max-w-3xl mx-auto mb-20 leading-relaxed animate-fade-in-up delay-100">
-            <p>
-              At Wintouch Academy, we recognize that true education transcends
-              textbooks. Designed exclusively for girls, our campus is a
-              sanctuary where academic excellence meets spiritual serenity. Our
-              integrated +1/+2 and NEET programs are rigorous, yet our approach
-              is nurturing. We weave Islamic cultural values into daily
-              life—from halal dining to prayer facilities—ensuring students
-              never have to compromise on their identity while chasing their
-              ambitions.
-            </p>
+          <h2 className="text-3xl md:text-5xl font-bold text-[#2D1B2E] mb-4">
+            Nurturing Minds,{" "}
+            <span className="text-[#8C4B58]">Enriching Souls</span>
+          </h2>
+          <p className="text-[#2D1B2E]/60 max-w-2xl mx-auto text-lg">
+            Where academic excellence meets spiritual growth and holistic
+            development
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <div className="w-12 h-[2px] bg-gradient-to-r from-transparent to-[#E8A86C] rounded-full" />
+            <div className="w-3 h-3 border-2 border-[#8C4B58] rounded-full" />
+            <div className="w-12 h-[2px] bg-gradient-to-l from-transparent to-[#E8A86C] rounded-full" />
           </div>
+        </div>
 
-          {/* Stats Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mb-20">
-            {STATS.map((stat, idx) => (
-              <div
-                key={idx}
-                className="bg-[#E4A068]/10 backdrop-blur-sm p-8 rounded-[1rem] hover:bg-white/60 transition-all duration-300 group flex flex-col items-center gap-4 text-center"
-              >
-                <div className="p-4 bg-[#FFFBF0] rounded-full group-hover:scale-110 transition-transform duration-300">
-                  <stat.icon className="w-8 h-8 text-[#2D1B2E] stroke-[1.5]" />
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 max-w-7xl mx-auto">
+          {/* Vision - Large Feature Card */}
+          <div
+            className={`lg:col-span-7 group transition-all duration-700 ${
+              isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="relative h-full bg-gradient-to-br from-[#2D1B2E] to-[#4A2F4A] rounded-3xl p-8 md:p-10 overflow-hidden min-h-[400px] flex flex-col justify-between">
+              {/* Decorative Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-64 h-64 border border-white/20 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 border border-white/20 rounded-full translate-y-1/2 -translate-x-1/2" />
+              </div>
+
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full mb-6">
+                  <Eye className="w-4 h-4 text-[#E8A86C]" />
+                  <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">
+                    Our Vision
+                  </span>
                 </div>
-                <h4 className="text-3xl font-bold text-[#2D1B2E] font-display">
-                  {stat.value}
-                </h4>
-                <p className="text-sm font-medium text-[#8C4B58] uppercase tracking-wider">
-                  {stat.label}
+
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                  Moulding young leaders who enlighten the world
+                </h2>
+
+                <p className="text-white/70 text-lg leading-relaxed max-w-xl">
+                  We don&apos;t merely prepare students for an examination; we
+                  nurture future healers, leaders, and changemakers. Our vision
+                  extends beyond NEET ranks — we aspire to shape compassionate
+                  physicians who serve humanity with competence and conscience.
                 </p>
               </div>
-            ))}
+
+              <div className="relative z-10 mt-8 flex items-center gap-3">
+                <div className="h-[2px] w-12 bg-gradient-to-r from-[#E8A86C] to-transparent rounded-full" />
+                <span className="text-[#E8A86C] text-sm font-medium">
+                  Knowledge • Skills • Values
+                </span>
+              </div>
+            </div>
           </div>
+
+          {/* Mission - Accent Card */}
+          <div
+            className={`lg:col-span-5 group transition-all duration-700 delay-100 ${
+              isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="relative h-full bg-gradient-to-br from-[#8C4B58] to-[#6E3A47] rounded-3xl p-8 md:p-10 overflow-hidden min-h-[400px] flex flex-col justify-between">
+              {/* Decorative Element */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full mb-6">
+                  <Target className="w-4 h-4 text-[#E8A86C]" />
+                  <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">
+                    Our Mission
+                  </span>
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight">
+                  Holistic learning that inspires dreams
+                </h3>
+
+                <p className="text-white/70 leading-relaxed">
+                  To create a holistic and individualized learning environment
+                  that inspires students to dream, design, and develop
+                  respectable lives.
+                </p>
+              </div>
+
+              <div className="relative z-10 mt-6 pt-6 border-t border-white/10">
+                <p className="text-white/60 text-sm">
+                  Nurturing academic rigor with Islamic values and cultural
+                  identity
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+          {/* {CORE_VALUES.map((value, idx) => {
+            const Icon = value.icon;
+            return (
+              <div
+                key={idx}
+                className={`lg:col-span-3 group transition-all duration-500 ${
+                  isInView
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-6"
+                }`}
+                style={{ transitionDelay: `${200 + idx * 75}ms` }}
+              >
+                <div className="relative h-full bg-[#E8A86C]/10 rounded-2xl p-6 border border-[#8C4B58]/10 hover:border-[#8C4B58]/30 hover:shadow-xl hover:shadow-[#8C4B58]/10 transition-all duration-300 group-hover:-translate-y-1">
+                  
+                  <div className="w-12 h-12 bg-[#8C4B58]/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#8C4B58] transition-colors duration-300">
+                    <Icon className="w-6 h-6 text-[#8C4B58] group-hover:text-white transition-colors duration-300" />
+                  </div>
+
+                  <h4 className="text-lg font-bold text-[#2D1B2E] mb-2 group-hover:text-[#8C4B58] transition-colors duration-300">
+                    {value.label}
+                  </h4>
+
+                  <p className="text-sm text-[#2D1B2E]/70 leading-relaxed font-medium">
+                    {value.description}
+                  </p>
+
+                  
+                  <div className="absolute bottom-0 left-6 right-6 h-[2px] bg-[#8C4B58] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </div>
+              </div>
+            );
+          })} */}
         </div>
       </div>
     </section>
