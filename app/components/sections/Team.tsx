@@ -39,7 +39,7 @@ export default function Team() {
           </h2>
           <p className="text-xl text-[#2D1B2E]/60 max-w-2xl mx-auto leading-relaxed">
             Dedicated educators and administrators committed to nurturing the
-            next generation of women leaders.
+            next generation of achievers and visionaries.
           </p>
         </div>
 
@@ -90,9 +90,9 @@ export default function Team() {
                   <p className="text-[#E8A86C] font-semibold text-sm mb-3">
                     {member.role}
                   </p>
-                  <p className="text-[#2D1B2E]/60 text-sm leading-relaxed line-clamp-2">
+                  {/* <p className="text-[#2D1B2E]/60 text-sm leading-relaxed line-clamp-2">
                     {member.bio}
-                  </p>
+                  </p> */}
                 </div>
 
                 {/* Bottom Accent Line */}

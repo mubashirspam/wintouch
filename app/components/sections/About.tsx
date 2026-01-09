@@ -170,8 +170,8 @@ export default function About() {
             </div>
           </div>
 
-          {/* Core Values - Grid of 4 */}
-          {CORE_VALUES.map((value, idx) => {
+
+          {/* {CORE_VALUES.map((value, idx) => {
             const Icon = value.icon;
             return (
               <div
@@ -184,7 +184,7 @@ export default function About() {
                 style={{ transitionDelay: `${200 + idx * 75}ms` }}
               >
                 <div className="relative h-full bg-[#E8A86C]/10 rounded-2xl p-6 border border-[#8C4B58]/10 hover:border-[#8C4B58]/30 hover:shadow-xl hover:shadow-[#8C4B58]/10 transition-all duration-300 group-hover:-translate-y-1">
-                  {/* Icon */}
+                  
                   <div className="w-12 h-12 bg-[#8C4B58]/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#8C4B58] transition-colors duration-300">
                     <Icon className="w-6 h-6 text-[#8C4B58] group-hover:text-white transition-colors duration-300" />
                   </div>
@@ -197,12 +197,12 @@ export default function About() {
                     {value.description}
                   </p>
 
-                  {/* Hover Accent */}
+                  
                   <div className="absolute bottom-0 left-6 right-6 h-[2px] bg-[#8C4B58] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </div>
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     </section>

@@ -35,7 +35,7 @@ export default function Admissions() {
       subtitle: "NEET Coaching Repeaters",
       description:
         "Plus Two Science കഴിഞ്ഞ വിദ്യാർഥിനികൾക്ക് intensive NEET preparation",
-      duration: "1-2 Years",
+      duration: "1 Year",
       forWhom: "Plus Two Science Students",
       icon: Heart,
       gradient: "from-[#8C4B58] to-[#E8A86C]",
@@ -94,7 +94,7 @@ export default function Admissions() {
             <Link
               key={program.id}
               href={program.link}
-              className={`group relative bg-white rounded-3xl overflow-hidden border-2 border-transparent hover:border-[#E8A86C]/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${program.shadowColor}`}
+              className={`group relative bg-[#E8A86C]/10 rounded-3xl overflow-hidden border-2 border-[#E8A86C]/20 hover:border-[#E8A86C]/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${program.shadowColor}`}
               style={{ animationDelay: `${index * 0.15}s` }}
             >
               {/* Card Header Gradient */}
