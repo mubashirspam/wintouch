@@ -54,23 +54,24 @@ const COURSE_OPTIONS = [
 ];
 
 const BOARD_OPTIONS = [
-  { value: "cbse", label: "CBSE" },
-  { value: "state", label: "State Board" },
-  { value: "icse", label: "ICSE" },
-  { value: "others", label: "Others" },
+  { value: "CBSE", label: "CBSE" },
+  { value: "STATE", label: "State Board" },
+  { value: "ICSE", label: "ICSE" },
+  { value: "OTHERS", label: "Others" },
 ];
 
 const STREAM_OPTIONS = [
+  { value: "Science", label: "Science (Biology)" },
   {
-    value: "bio-maths",
+    value: "Bio-Maths",
     label: "Bio Maths (PCMB - Physics, Chemistry, Biology, Maths)",
   },
   {
-    value: "computer-science",
+    value: "Computer-Science",
     label: "Computer Science (PCMC - Physics, Chemistry, Maths, Computer)",
   },
-  { value: "commerce", label: "Commerce" },
-  { value: "humanities", label: "Humanities" },
+  { value: "Commerce", label: "Commerce" },
+  { value: "Humanities", label: "Humanities" },
 ];
 
 const YES_NO_OPTIONS = [
@@ -87,7 +88,6 @@ interface FormData {
   email: string;
   parentName: string;
   parentOccupation: string;
-  studyingClass: string;
   school: string;
   district: string;
   state: string;
@@ -121,16 +121,15 @@ export default function ExamForm({
     email: "",
     parentName: "",
     parentOccupation: "",
-    studyingClass: "",
     school: "",
     district: "",
     state: "",
     board: "",
     ambition: "",
     stream: "",
-    interestedInNeetCoaching: undefined,
-    interestedInStayingHostel: undefined,
-    attendNeetCoachingBefore: undefined,
+    interestedInNeetCoaching: "no",
+    interestedInStayingHostel: "no",
+    attendNeetCoachingBefore: "no",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -193,10 +192,6 @@ export default function ExamForm({
       newErrors.parentOccupation = "Parent occupation is required";
     }
 
-    if (!formData.studyingClass.trim()) {
-      newErrors.studyingClass = "Studying class is required";
-    }
-
     if (!formData.school.trim()) {
       newErrors.school = "School name is required";
     }
@@ -242,48 +237,33 @@ export default function ExamForm({
         email: formData.email,
         parentName: formData.parentName,
         parentOccupation: formData.parentOccupation,
-        studyingClass: formData.studyingClass,
         school: formData.school,
         district: formData.district,
         state: formData.state,
         board: formData.board,
+        ambition: formData.ambition || "",
+        interestedInNeetCoaching: formData.interestedInNeetCoaching || "no",
+        interestedInStayingHostel: formData.interestedInStayingHostel || "no",
       };
 
-      if (formData.ambition) {
-        payload.ambition = formData.ambition;
-      }
-
-      if (formData.interestedInNeetCoaching) {
-        payload.interestedInNeetCoaching = formData.interestedInNeetCoaching;
-      }
-
-      if (formData.interestedInStayingHostel) {
-        payload.interestedInStayingHostel = formData.interestedInStayingHostel;
-      }
-
+      // Add stream and attendNeetCoachingBefore for exam_twelfth
       if (formData.courseType === "exam_twelfth") {
-        if (formData.stream) {
-          payload.stream = formData.stream;
-        }
-        if (formData.attendNeetCoachingBefore) {
-          payload.attendNeetCoachingBefore = formData.attendNeetCoachingBefore;
-        }
+        payload.stream = formData.stream || "";
+        payload.attendNeetCoachingBefore =
+          formData.attendNeetCoachingBefore || "no";
       }
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/leads/exams`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch("/api/exam", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.success) {
         setSubmitStatus("success");
         setFormData({
           courseType: "",
@@ -294,16 +274,15 @@ export default function ExamForm({
           email: "",
           parentName: "",
           parentOccupation: "",
-          studyingClass: "",
           school: "",
           district: "",
           state: "",
           board: "",
           ambition: "",
           stream: "",
-          interestedInNeetCoaching: undefined,
-          interestedInStayingHostel: undefined,
-          attendNeetCoachingBefore: undefined,
+          interestedInNeetCoaching: "no",
+          interestedInStayingHostel: "no",
+          attendNeetCoachingBefore: "no",
         });
         onSuccess?.();
       } else {
@@ -312,7 +291,8 @@ export default function ExamForm({
           data.message || "Something went wrong. Please try again."
         );
       }
-    } catch {
+    } catch (error) {
+      console.error("Form submission error:", error);
       setSubmitStatus("error");
       setErrorMessage(
         "Network error. Please check your connection and try again."
@@ -402,704 +382,688 @@ export default function ExamForm({
               : "p-2"
           }`}
         >
-          {submitStatus === "success" && (
-            <div className="mb-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl animate-fade-in-up">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-green-800">
-                    Registration Successful! 🎉
-                  </h3>
-                  <p className="text-green-600 text-sm">
-                    We&apos;ll contact you soon with exam details.
-                  </p>
-                </div>
+          {submitStatus === "success" ? (
+            <div className="text-center py-12 px-6 animate-fade-in-up">
+              <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                <CheckCircle2 className="w-10 h-10 text-white" />
               </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#2D1B2E] mb-3">
+                Registration Successful! 🎉
+              </h2>
+              <p className="text-gray-600 text-base max-w-md mx-auto mb-6">
+                Thank you for registering for the NEET Scholarship Exam. Our
+                team will contact you soon with the exam details and schedule.
+              </p>
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4 max-w-sm mx-auto mb-8">
+                <div className="flex items-center gap-2 text-green-700">
+                  <Sparkles className="w-5 h-5" />
+                  <span className="font-medium">What&apos;s Next?</span>
+                </div>
+                <ul className="text-sm text-green-600 mt-2 text-left space-y-1">
+                  <li>• Check your email for confirmation</li>
+                  <li>• Save our WhatsApp number for updates</li>
+                  <li>• Prepare for the scholarship exam</li>
+                </ul>
+              </div>
+              <button
+                onClick={() => setSubmitStatus("idle")}
+                className="px-6 py-3 bg-gradient-to-r from-[#E8A86C] to-[#8C4B58] text-white font-bold text-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                Register Another Student
+              </button>
             </div>
-          )}
-
-          {submitStatus === "error" && (
-            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl animate-fade-in-up">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-100 rounded-full">
-                  <AlertCircle className="w-6 h-6 text-red-600" />
+          ) : (
+            <>
+              {submitStatus === "error" && (
+                <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl animate-fade-in-up">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-red-100 rounded-full">
+                      <AlertCircle className="w-6 h-6 text-red-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-red-800">
+                        Registration Failed
+                      </h3>
+                      <p className="text-red-600 text-sm">{errorMessage}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-red-800">
-                    Registration Failed
-                  </h3>
-                  <p className="text-red-600 text-sm">{errorMessage}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            {/* Course Type */}
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <GraduationCap className="w-4 h-4 text-[#8C4B58]" />
-                Choose Course *
-              </label>
-              <div className="relative">
-                <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <select
-                  name="courseType"
-                  value={formData.courseType}
-                  onChange={handleChange}
-                  className={`${inputBaseClass} appearance-none cursor-pointer ${
-                    errors.courseType ? errorInputClass : normalInputClass
-                  }`}
-                >
-                  <option value="">Select your course</option>
-                  {COURSE_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-[#8C4B58]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </div>
-              {errors.courseType && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.courseType}
-                </p>
               )}
-            </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <User className="w-4 h-4 text-[#8C4B58]" />
-                  Student Name *
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter student's full name"
-                    autoComplete="name"
-                    className={`${inputBaseClass} ${
-                      errors.name ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.name && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.name}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Calendar className="w-4 h-4 text-[#8C4B58]" />
-                  Date of Birth *
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} ${
-                      errors.dob ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.dob && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.dob}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Phone className="w-4 h-4 text-[#8C4B58]" />
-                  Contact Number *
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="tel"
-                    name="contactNo"
-                    value={formData.contactNo}
-                    onChange={handleChange}
-                    placeholder="10-digit phone"
-                    autoComplete="tel"
-                    maxLength={10}
-                    className={`${inputBaseClass} ${
-                      errors.contactNo ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.contactNo && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.contactNo}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center justify-between text-sm font-semibold text-[#2D1B2E]">
-                  <span className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4 text-[#8C4B58]" />
-                    WhatsApp *
-                  </span>
-                  {formData.contactNo && (
-                    <button
-                      type="button"
-                      onClick={handleCopyWhatsapp}
-                      className="text-xs text-[#8C4B58] hover:text-[#E8A86C] transition-colors"
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+                {/* Course Type */}
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <GraduationCap className="w-4 h-4 text-[#8C4B58]" />
+                    Choose Course *
+                  </label>
+                  <div className="relative">
+                    <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <select
+                      name="courseType"
+                      value={formData.courseType}
+                      onChange={handleChange}
+                      className={`${inputBaseClass} appearance-none cursor-pointer ${
+                        errors.courseType ? errorInputClass : normalInputClass
+                      }`}
                     >
-                      Same as contact
-                    </button>
+                      <option value="">Select your course</option>
+                      {COURSE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-[#8C4B58]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  {errors.courseType && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.courseType}
+                    </p>
                   )}
-                </label>
-                <div className="relative">
-                  <MessageCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="tel"
-                    name="whatsappNo"
-                    value={formData.whatsappNo}
-                    onChange={handleChange}
-                    placeholder="WhatsApp number"
-                    autoComplete="tel"
-                    maxLength={10}
-                    className={`${inputBaseClass} ${
-                      errors.whatsappNo ? errorInputClass : normalInputClass
-                    }`}
-                  />
                 </div>
-                {errors.whatsappNo && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.whatsappNo}
-                  </p>
-                )}
-              </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <Mail className="w-4 h-4 text-[#8C4B58]" />
-                Email Address *
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter email address"
-                  autoComplete="email"
-                  className={`${inputBaseClass} ${
-                    errors.email ? errorInputClass : normalInputClass
-                  }`}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.email}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <User className="w-4 h-4 text-[#8C4B58]" />
+                      Student Name *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Enter student's full name"
+                        autoComplete="name"
+                        className={`${inputBaseClass} ${
+                          errors.name ? errorInputClass : normalInputClass
+                        }`}
+                      />
+                    </div>
+                    {errors.name && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <Calendar className="w-4 h-4 text-[#8C4B58]" />
+                      Date of Birth *
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <input
+                        type="date"
+                        name="dob"
+                        value={formData.dob}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} ${
+                          errors.dob ? errorInputClass : normalInputClass
+                        }`}
+                      />
+                    </div>
+                    {errors.dob && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.dob}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <Phone className="w-4 h-4 text-[#8C4B58]" />
+                      Contact Number *
+                    </label>
+                    <div className="relative">
+                      <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <input
+                        type="tel"
+                        name="contactNo"
+                        value={formData.contactNo}
+                        onChange={handleChange}
+                        placeholder="10-digit phone"
+                        autoComplete="tel"
+                        maxLength={10}
+                        className={`${inputBaseClass} ${
+                          errors.contactNo ? errorInputClass : normalInputClass
+                        }`}
+                      />
+                    </div>
+                    {errors.contactNo && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.contactNo}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center justify-between text-sm font-semibold text-[#2D1B2E]">
+                      <span className="flex items-center gap-2">
+                        <MessageCircle className="w-4 h-4 text-[#8C4B58]" />
+                        WhatsApp *
+                      </span>
+                      {formData.contactNo && (
+                        <button
+                          type="button"
+                          onClick={handleCopyWhatsapp}
+                          className="text-xs text-[#8C4B58] hover:text-[#E8A86C] transition-colors"
+                        >
+                          Same as contact
+                        </button>
+                      )}
+                    </label>
+                    <div className="relative">
+                      <MessageCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <input
+                        type="tel"
+                        name="whatsappNo"
+                        value={formData.whatsappNo}
+                        onChange={handleChange}
+                        placeholder="WhatsApp number"
+                        autoComplete="tel"
+                        maxLength={10}
+                        className={`${inputBaseClass} ${
+                          errors.whatsappNo ? errorInputClass : normalInputClass
+                        }`}
+                      />
+                    </div>
+                    {errors.whatsappNo && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.whatsappNo}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <Mail className="w-4 h-4 text-[#8C4B58]" />
+                    Email Address *
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Enter email address"
+                      autoComplete="email"
+                      className={`${inputBaseClass} ${
+                        errors.email ? errorInputClass : normalInputClass
+                      }`}
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <User className="w-4 h-4 text-[#8C4B58]" />
+                      Parent Name *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <input
+                        type="text"
+                        name="parentName"
+                        value={formData.parentName}
+                        onChange={handleChange}
+                        placeholder="Enter parent's name"
+                        className={`${inputBaseClass} ${
+                          errors.parentName ? errorInputClass : normalInputClass
+                        }`}
+                      />
+                    </div>
+                    {errors.parentName && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.parentName}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <Briefcase className="w-4 h-4 text-[#8C4B58]" />
+                      Parent Occupation *
+                    </label>
+                    <div className="relative">
+                      <Briefcase className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <input
+                        type="text"
+                        name="parentOccupation"
+                        value={formData.parentOccupation}
+                        onChange={handleChange}
+                        placeholder="Enter parent's occupation"
+                        className={`${inputBaseClass} ${
+                          errors.parentOccupation
+                            ? errorInputClass
+                            : normalInputClass
+                        }`}
+                      />
+                    </div>
+                    {errors.parentOccupation && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.parentOccupation}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <School className="w-4 h-4 text-[#8C4B58]" />
+                    School Name *
+                  </label>
+                  <div className="relative">
+                    <School className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="school"
+                      value={formData.school}
+                      onChange={handleChange}
+                      placeholder="Enter school name"
+                      autoComplete="organization"
+                      className={`${inputBaseClass} ${
+                        errors.school ? errorInputClass : normalInputClass
+                      }`}
+                    />
+                  </div>
+                  {errors.school && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.school}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <MapPin className="w-4 h-4 text-[#8C4B58]" />
+                      State *
+                    </label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${
+                          errors.state ? errorInputClass : normalInputClass
+                        }`}
+                      >
+                        <option value="">Select state</option>
+                        {INDIAN_STATES.map((state) => (
+                          <option key={state} value={state}>
+                            {state}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    {errors.state && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.state}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <Map className="w-4 h-4 text-[#8C4B58]" />
+                      District *
+                    </label>
+                    <div className="relative">
+                      <Map className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="district"
+                        value={formData.district}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${
+                          errors.district ? errorInputClass : normalInputClass
+                        }`}
+                      >
+                        <option value="">Select district</option>
+                        {(formData.state === "Karnataka"
+                          ? KARNATAKA_DISTRICTS
+                          : KERALA_DISTRICTS
+                        ).map((district) => (
+                          <option key={district} value={district}>
+                            {district}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    {errors.district && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.district}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <BookOpen className="w-4 h-4 text-[#8C4B58]" />
+                      Board *
+                    </label>
+                    <div className="relative">
+                      <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="board"
+                        value={formData.board}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${
+                          errors.board ? errorInputClass : normalInputClass
+                        }`}
+                      >
+                        <option value="">Select board</option>
+                        {BOARD_OPTIONS.map((board) => (
+                          <option key={board.value} value={board.value}>
+                            {board.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    {errors.board && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.board}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {formData.courseType === "exam_twelfth" && (
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <BookOpen className="w-4 h-4 text-[#8C4B58]" />
+                      Stream *
+                    </label>
+                    <div className="relative">
+                      <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="stream"
+                        value={formData.stream}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${
+                          errors.stream ? errorInputClass : normalInputClass
+                        }`}
+                      >
+                        <option value="">Select stream</option>
+                        {STREAM_OPTIONS.map((stream) => (
+                          <option key={stream.value} value={stream.value}>
+                            {stream.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    {errors.stream && (
+                      <p className="text-red-500 text-xs flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {errors.stream}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <Target className="w-4 h-4 text-[#8C4B58]" />
+                    Ambition (Optional)
+                  </label>
+                  <div className="relative">
+                    <Target className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="ambition"
+                      value={formData.ambition}
+                      onChange={handleChange}
+                      placeholder="What do you want to become?"
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <BookOpen className="w-4 h-4 text-[#8C4B58]" />
+                      Interested in NEET Coaching? (Optional)
+                    </label>
+                    <div className="relative">
+                      <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="interestedInNeetCoaching"
+                        value={formData.interestedInNeetCoaching || ""}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${normalInputClass}`}
+                      >
+                        <option value="">Select option</option>
+                        {YES_NO_OPTIONS.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <Home className="w-4 h-4 text-[#8C4B58]" />
+                      Interested in Staying Hostel? (Optional)
+                    </label>
+                    <div className="relative">
+                      <Home className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="interestedInStayingHostel"
+                        value={formData.interestedInStayingHostel || ""}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${normalInputClass}`}
+                      >
+                        <option value="">Select option</option>
+                        {YES_NO_OPTIONS.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {formData.courseType === "exam_twelfth" && (
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                      <BookOpen className="w-4 h-4 text-[#8C4B58]" />
+                      Attended NEET Coaching Before? (Optional)
+                    </label>
+                    <div className="relative">
+                      <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                      <select
+                        name="attendNeetCoachingBefore"
+                        value={formData.attendNeetCoachingBefore || ""}
+                        onChange={handleChange}
+                        className={`${inputBaseClass} appearance-none cursor-pointer ${normalInputClass}`}
+                      >
+                        <option value="">Select option</option>
+                        {YES_NO_OPTIONS.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-4 h-4 text-[#8C4B58]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full mt-5 py-3.5 bg-gradient-to-r from-[#E8A86C] to-[#8C4B58] text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      Register for Exam
+                      <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+
+                <p className="text-center text-xs text-gray-500 mt-3">
+                  Your information is secure and will only be used for exam
+                  registration.
                 </p>
-              )}
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <User className="w-4 h-4 text-[#8C4B58]" />
-                  Parent Name *
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="text"
-                    name="parentName"
-                    value={formData.parentName}
-                    onChange={handleChange}
-                    placeholder="Enter parent's name"
-                    className={`${inputBaseClass} ${
-                      errors.parentName ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.parentName && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.parentName}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Briefcase className="w-4 h-4 text-[#8C4B58]" />
-                  Parent Occupation *
-                </label>
-                <div className="relative">
-                  <Briefcase className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="text"
-                    name="parentOccupation"
-                    value={formData.parentOccupation}
-                    onChange={handleChange}
-                    placeholder="Enter parent's occupation"
-                    className={`${inputBaseClass} ${
-                      errors.parentOccupation
-                        ? errorInputClass
-                        : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.parentOccupation && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.parentOccupation}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                  Studying Class *
-                </label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="text"
-                    name="studyingClass"
-                    value={formData.studyingClass}
-                    onChange={handleChange}
-                    placeholder={
-                      formData.courseType === "exam_tenth"
-                        ? "Class 10"
-                        : "Class 12"
-                    }
-                    className={`${inputBaseClass} ${
-                      errors.studyingClass ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.studyingClass && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.studyingClass}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <School className="w-4 h-4 text-[#8C4B58]" />
-                  School Name *
-                </label>
-                <div className="relative">
-                  <School className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="text"
-                    name="school"
-                    value={formData.school}
-                    onChange={handleChange}
-                    placeholder="Enter school name"
-                    autoComplete="organization"
-                    className={`${inputBaseClass} ${
-                      errors.school ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.school && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.school}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <MapPin className="w-4 h-4 text-[#8C4B58]" />
-                  State *
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.state ? errorInputClass : normalInputClass
-                    }`}
-                  >
-                    <option value="">Select state</option>
-                    {INDIAN_STATES.map((state) => (
-                      <option key={state} value={state}>
-                        {state}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                {errors.state && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.state}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Map className="w-4 h-4 text-[#8C4B58]" />
-                  District *
-                </label>
-                <div className="relative">
-                  <Map className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="district"
-                    value={formData.district}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.district ? errorInputClass : normalInputClass
-                    }`}
-                  >
-                    <option value="">Select district</option>
-                    {(formData.state === "Karnataka"
-                      ? KARNATAKA_DISTRICTS
-                      : KERALA_DISTRICTS
-                    ).map((district) => (
-                      <option key={district} value={district}>
-                        {district}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                {errors.district && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.district}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                  Board *
-                </label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="board"
-                    value={formData.board}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.board ? errorInputClass : normalInputClass
-                    }`}
-                  >
-                    <option value="">Select board</option>
-                    {BOARD_OPTIONS.map((board) => (
-                      <option key={board.value} value={board.value}>
-                        {board.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                {errors.board && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.board}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {formData.courseType === "exam_twelfth" && (
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                  Stream *
-                </label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="stream"
-                    value={formData.stream}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.stream ? errorInputClass : normalInputClass
-                    }`}
-                  >
-                    <option value="">Select stream</option>
-                    {STREAM_OPTIONS.map((stream) => (
-                      <option key={stream.value} value={stream.value}>
-                        {stream.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                {errors.stream && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.stream}
-                  </p>
-                )}
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <Target className="w-4 h-4 text-[#8C4B58]" />
-                Ambition (Optional)
-              </label>
-              <div className="relative">
-                <Target className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <input
-                  type="text"
-                  name="ambition"
-                  value={formData.ambition}
-                  onChange={handleChange}
-                  placeholder="What do you want to become?"
-                  className={`${inputBaseClass} ${normalInputClass}`}
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                  Interested in NEET Coaching? (Optional)
-                </label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="interestedInNeetCoaching"
-                    value={formData.interestedInNeetCoaching || ""}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${normalInputClass}`}
-                  >
-                    <option value="">Select option</option>
-                    {YES_NO_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Home className="w-4 h-4 text-[#8C4B58]" />
-                  Interested in Staying Hostel? (Optional)
-                </label>
-                <div className="relative">
-                  <Home className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="interestedInStayingHostel"
-                    value={formData.interestedInStayingHostel || ""}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${normalInputClass}`}
-                  >
-                    <option value="">Select option</option>
-                    {YES_NO_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {formData.courseType === "exam_twelfth" && (
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                  Attended NEET Coaching Before? (Optional)
-                </label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="attendNeetCoachingBefore"
-                    value={formData.attendNeetCoachingBefore || ""}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${normalInputClass}`}
-                  >
-                    <option value="">Select option</option>
-                    {YES_NO_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full mt-5 py-3.5 bg-gradient-to-r from-[#E8A86C] to-[#8C4B58] text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  Register for Exam
-                  <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-
-            <p className="text-center text-xs text-gray-500 mt-3">
-              Your information is secure and will only be used for exam
-              registration.
-            </p>
-          </form>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </section>
