@@ -81,7 +81,7 @@ export default function RepeatersLeadPage() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <Image
-            src="/01133.JPG"
+            src="https://cdn.wintouchacademy.com/public/site-assets/gallery_9.jpeg"
             alt="Wintouch Academy"
             fill
             className="object-cover object-top"

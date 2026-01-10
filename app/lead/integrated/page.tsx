@@ -75,7 +75,7 @@ export default function IntegratedLeadPage() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <Image
-            src="/0294.JPG"
+            src="https://cdn.wintouchacademy.com/public/site-assets/gallery_10.jpeg"
             alt="Wintouch Academy"
             fill
             className="object-cover object-center"
