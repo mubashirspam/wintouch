@@ -133,7 +133,7 @@ export default function ScholarshipPopup() {
             {/* Left Side - Image (Desktop only) */}
             <div className="hidden md:block relative w-2/5 min-h-[480px]">
               <Image
-                src="/0635.JPG"
+                src="https://cdn.wintouchacademy.com/public/site-assets/gallery_8.jpeg"
                 alt="Scholarship Program"
                 fill
                 className="object-cover"
@@ -192,7 +192,7 @@ export default function ScholarshipPopup() {
                     key={index}
                     className={`relative rounded-2xl border-2 transition-all ${
                       tier.isBest
-                        ? "bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-300 shadow-md"
+                        ? "bg-linear-to-r from-amber-50 to-yellow-50 border-amber-300 shadow-md"
                         : "bg-white border-gray-100"
                     }`}
                   >
