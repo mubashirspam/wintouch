@@ -1,5 +1,5 @@
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
-import { ScholarshipForm } from "@/app/components/sections";
+import { ExamForm } from "@/app/components/sections";
 
 export const metadata = {
   title: "NEET Scholarship Exam - Wintouch Academy",
@@ -42,7 +42,7 @@ export default function ScholarshipPage() {
         </section>
 
         {/* Embedded Form */}
-        <ScholarshipForm />
+        <ExamForm variant="embedded" />
       </main>
 
       <Footer />

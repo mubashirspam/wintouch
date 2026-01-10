@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { X, Award } from "lucide-react";
-import ScholarshipForm from "@/app/components/sections/ScholarshipForm";
+import ExamForm from "@/app/components/sections/ExamForm";
 
 interface ScholarshipFormModalProps {
   isOpen: boolean;
@@ -89,7 +89,7 @@ export default function ScholarshipFormModal({
 
         {/* Form Content */}
         <div className="p-6">
-          <ScholarshipForm variant="modal" onSuccess={onClose} />
+          <ExamForm variant="standalone" onSuccess={onClose} />
         </div>
       </div>
     </div>

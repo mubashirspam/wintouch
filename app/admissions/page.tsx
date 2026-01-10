@@ -1,5 +1,5 @@
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
-import { Admissions, FAQ, ScholarshipForm } from "@/app/components/sections";
+import { Admissions, FAQ } from "@/app/components/sections";
 
 export const metadata = {
   title: "Admissions - Wintouch Academy",
@@ -17,7 +17,8 @@ export default function AdmissionsPage() {
         <div className="bg-[#FFFBF0] pt-12">
           <Admissions />
         </div>
-        <ScholarshipForm />
+        {/* <ScholarshipForm /> */}
+        {/* <AdmissionForm /> */}
         <FAQ />
       </main>
 
