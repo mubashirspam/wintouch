@@ -9,6 +9,7 @@ import {
   Team,
   AdmissionForm,
 } from "@/app/components/sections";
+import { ScholarshipPopup } from "@/app/components/ui";
 
 export const metadata = {
   title: "Wintouch Academy - Empowering Young Women Through Excellence",
@@ -37,6 +38,7 @@ export default function HomePage() {
       </main>
 
       <Footer />
+      <ScholarshipPopup />
     </div>
   );
 }
