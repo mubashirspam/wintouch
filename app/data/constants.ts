@@ -162,45 +162,47 @@ export const UNIQUE_FEATURES: UniqueFeature[] = [
 // Gallery Images
 export const GALLERY_IMAGES: GalleryImage[] = [
   {
-    src: "/01133.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_1.jpeg",
     alt: "Campus Life",
     label: "Campus Life",
     colSpan: 2,
     rowSpan: 2,
   },
   {
-    src: "/0294.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_2.jpeg",
     alt: "Student Activities",
     label: "Student Activities",
   },
   {
-    src: "/0367.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_3.jpeg",
     alt: "Learning Environment",
     label: "Learning Environment",
   },
   {
-    src: "/0406.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_4.jpeg",
     alt: "Campus Grounds",
     label: "Beautiful Campus",
     colSpan: 2,
   },
   {
-    src: "/0716.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_5.jpeg",
     alt: "Academy Life",
     label: "Academy Life",
   },
   {
-    src: "/0728.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_6.jpeg",
     alt: "Student Community",
     label: "Student Community",
   },
   {
-    src: "/01196.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_7.jpeg",
     alt: "Campus Events",
     label: "Campus Events",
     colSpan: 2,
   },
 ];
+
+
 
 // FAQ Data
 export const FAQ_QUESTIONS = [
@@ -272,14 +274,13 @@ export interface TeamMember {
   isFeatured?: boolean;
 }
 
-// Team Members Data
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: 1,
     name: "Abdul Latheef Uppala",
     role: "Chairman",
     department: "Leadership",
-    image: "/team/member-1.jpg",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_1.jpg",
     bio: "Visionary leader guiding Wintouch Academy's mission to provide world-class education rooted in Islamic values.",
     isFeatured: true,
   },
@@ -288,7 +289,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "Usthad Khaleel Hudawi",
     role: "Executive Director",
     department: "Leadership",
-    image: "/team/member-2.jpg",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_2.jpg",
     bio: "Strategic leader overseeing the academy's operations and ensuring excellence in all aspects of student development.",
     isFeatured: true,
   },
@@ -297,7 +298,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "Dr Basim Gazali",
     role: "Academic Director",
     department: "Academics",
-    image: "/team/member-3.jpg",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_3.jpg",
     bio: "Expert in NEET preparation and academic excellence, leading the curriculum design and teaching methodology.",
     isFeatured: true,
   },
@@ -306,7 +307,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "Mohamed Rashid",
     role: "CEO",
     department: "Leadership",
-    image: "/team/member-4.jpg",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_4.jpg",
     bio: "Driving operational excellence and ensuring the highest standards of education and student care.",
     isFeatured: true,
   },

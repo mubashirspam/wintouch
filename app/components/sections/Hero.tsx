@@ -19,10 +19,14 @@ export default function Hero() {
         <div className="relative w-full h-[700px] md:h-[600px] lg:h-[600px] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden">
           <div className="absolute inset-0">
             <img
-              src="/hero.jpg"
+              src="https://cdn.wintouchacademy.com/public/site-assets/hero.jpg"
               alt="Wintouch Academy students on the field"
               className="w-full h-full object-cover object-bottom"
             />
+          </div>
+
+          <div className="absolute z-10 right-0 ml:right-50 bottom-0">
+            <img src="/more.svg" alt="" className="object-bottom" />
           </div>
 
           <div className="absolute inset-0 bg-black/40" />
@@ -79,3 +83,8 @@ export default function Hero() {
     </section>
   );
 }
+
+
+
+
+
