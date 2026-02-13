@@ -253,7 +253,8 @@ export default function ExamForm({
           formData.attendNeetCoachingBefore || "no";
       }
 
-      const response = await fetch("/api/exam", {
+      const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
+      const response = await fetch(`${baseUrl}/leads/exams`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
