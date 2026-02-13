@@ -61,6 +61,7 @@ export const NAV_LINKS: NavLink[] = [
   { id: "programs", label: "Programs" },
   { id: "life", label: "Campus Life" },
   { id: "admissions", label: "Admissions" },
+  // { id: "exam", label: "Exams" },
 ];
 
 // WhatsApp Link
@@ -201,8 +202,6 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     colSpan: 2,
   },
 ];
-
-
 
 // FAQ Data
 export const FAQ_QUESTIONS = [

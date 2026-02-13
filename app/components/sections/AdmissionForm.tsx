@@ -15,6 +15,7 @@ import {
   Sparkles,
   BookOpen,
   Mail,
+  Target,
 } from "lucide-react";
 
 const KERALA_DISTRICTS = [
@@ -72,6 +73,7 @@ interface FormData {
   place: string;
   state: string;
   district: string;
+  ambition: string;
   stream?: string;
 }
 
@@ -85,6 +87,7 @@ interface FormErrors {
   place?: string;
   state?: string;
   district?: string;
+  ambition?: string;
   stream?: string;
 }
 
@@ -107,6 +110,7 @@ export default function AdmissionForm({
     place: "",
     state: "",
     district: "",
+    ambition: "",
     stream: "",
   });
 
@@ -174,6 +178,10 @@ export default function AdmissionForm({
       newErrors.district = "Please select your district";
     }
 
+    if (!formData.ambition.trim()) {
+      newErrors.ambition = "Ambition is required";
+    }
+
     if (
       formData.courseType === "admission_repeaters_course" &&
       !formData.stream
@@ -206,6 +214,7 @@ export default function AdmissionForm({
         whatsappNo: formData.whatsappNo,
         place: formData.place,
         district: formData.district,
+        ambition: formData.ambition,
       };
 
       if (
@@ -238,19 +247,20 @@ export default function AdmissionForm({
           place: "",
           state: "",
           district: "",
+          ambition: "",
           stream: "",
         });
         onSuccess?.();
       } else {
         setSubmitStatus("error");
         setErrorMessage(
-          data.message || "Something went wrong. Please try again."
+          data.message || "Something went wrong. Please try again.",
         );
       }
     } catch {
       setSubmitStatus("error");
       setErrorMessage(
-        "Network error. Please check your connection and try again."
+        "Network error. Please check your connection and try again.",
       );
     } finally {
       setIsSubmitting(false);
@@ -258,7 +268,7 @@ export default function AdmissionForm({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -300,197 +310,79 @@ export default function AdmissionForm({
   const isEmbedded = variant === "embedded";
 
   return (
-    <section
-      className={`relative overflow-hidden ${
-        isEmbedded
-          ? "py-16 bg-gradient-to-br from-[#2D1B2E] via-[#452c46] to-[#8C4B58]"
-          : ""
-      }`}
-    >
-      {isEmbedded && (
-        <>
-          <div className="absolute top-0 left-0 w-96 h-96 bg-[#E8A86C]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#8C4B58]/30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-        </>
-      )}
-
-      <div
-        className={`relative z-10 ${
-          isEmbedded ? "container mx-auto px-4" : ""
+    <>
+      <section
+        className={`relative overflow-hidden ${
+          isEmbedded
+            ? "py-16 bg-gradient-to-br from-[#2D1B2E] via-[#452c46] to-[#8C4B58]"
+            : ""
         }`}
       >
         {isEmbedded && (
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-              Admission Registration
-            </h2>
-            <p className="text-white/70 text-base max-w-2xl mx-auto">
-              Choose your course and complete the admission process
-            </p>
-          </div>
+          <>
+            <div className="absolute top-0 left-0 w-96 h-96 bg-[#E8A86C]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#8C4B58]/30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+          </>
         )}
 
         <div
-          className={`max-w-2xl mx-auto ${
-            isEmbedded
-              ? "bg-[#FFFBF0] rounded-2xl p-6 md:p-8 shadow-2xl"
-              : "p-2"
+          className={`relative z-10 ${
+            isEmbedded ? "container mx-auto px-4" : ""
           }`}
         >
-          {submitStatus === "success" && (
-            <div className="mb-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl animate-fade-in-up">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-green-800">
-                    Registration Successful! 🎉
-                  </h3>
-                  <p className="text-green-600 text-sm">
-                    We&apos;ll contact you soon with admission details.
-                  </p>
-                </div>
-              </div>
+          {isEmbedded && (
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                Admission Registration
+              </h2>
+              <p className="text-white/70 text-base max-w-2xl mx-auto">
+                Choose your course and complete the admission process
+              </p>
             </div>
           )}
 
-          {submitStatus === "error" && (
-            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl animate-fade-in-up">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-100 rounded-full">
-                  <AlertCircle className="w-6 h-6 text-red-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-red-800">
-                    Registration Failed
-                  </h3>
-                  <p className="text-red-600 text-sm">{errorMessage}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            {/* Course Type */}
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                Choose Course *
-              </label>
-              <div className="relative">
-                <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <select
-                  name="courseType"
-                  value={formData.courseType}
-                  onChange={handleChange}
-                  className={`${inputBaseClass} appearance-none cursor-pointer ${
-                    errors.courseType ? errorInputClass : normalInputClass
-                  }`}
-                >
-                  <option value="">Select your course</option>
-                  {COURSE_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-[#8C4B58]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+          <div
+            className={`max-w-2xl mx-auto ${
+              isEmbedded
+                ? "bg-[#FFFBF0] rounded-2xl p-6 md:p-8 shadow-2xl"
+                : "p-2"
+            }`}
+          >
+            {submitStatus === "error" && (
+              <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl animate-fade-in-up">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-red-100 rounded-full">
+                    <AlertCircle className="w-6 h-6 text-red-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-red-800">
+                      Registration Failed
+                    </h3>
+                    <p className="text-red-600 text-sm">{errorMessage}</p>
+                  </div>
                 </div>
               </div>
-              {errors.courseType && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.courseType}
-                </p>
-              )}
-            </div>
+            )}
 
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <User className="w-4 h-4 text-[#8C4B58]" />
-                Student Name *
-              </label>
-              <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter student's full name"
-                  autoComplete="name"
-                  className={`${inputBaseClass} ${
-                    errors.name ? errorInputClass : normalInputClass
-                  }`}
-                />
-              </div>
-              {errors.name && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.name}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <Mail className="w-4 h-4 text-[#8C4B58]" />
-                Email *
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter email address"
-                  autoComplete="email"
-                  className={`${inputBaseClass} ${
-                    errors.email ? errorInputClass : normalInputClass
-                  }`}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.email}
-                </p>
-              )}
-            </div>
-
-            {formData.courseType === "admission_repeaters_course" && (
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+              {/* Course Type */}
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                   <BookOpen className="w-4 h-4 text-[#8C4B58]" />
-                  Select Stream *
+                  Choose Course *
                 </label>
                 <div className="relative">
                   <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                   <select
-                    name="stream"
-                    value={formData.stream}
+                    name="courseType"
+                    value={formData.courseType}
                     onChange={handleChange}
                     className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.stream ? errorInputClass : normalInputClass
+                      errors.courseType ? errorInputClass : normalInputClass
                     }`}
                   >
-                    <option value="">Select your stream</option>
-                    {STREAM_OPTIONS.map((option) => (
+                    <option value="">Select your course</option>
+                    {COURSE_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -512,261 +404,426 @@ export default function AdmissionForm({
                     </svg>
                   </div>
                 </div>
-                {errors.stream && (
+                {errors.courseType && (
                   <p className="text-red-500 text-xs flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.stream}
+                    {errors.courseType}
                   </p>
                 )}
               </div>
-            )}
 
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <School className="w-4 h-4 text-[#8C4B58]" />
-                Current School *
-              </label>
-              <div className="relative">
-                <School className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                <input
-                  type="text"
-                  name="school"
-                  value={formData.school}
-                  onChange={handleChange}
-                  placeholder="Enter your school name"
-                  autoComplete="organization"
-                  className={`${inputBaseClass} ${
-                    errors.school ? errorInputClass : normalInputClass
-                  }`}
-                />
-              </div>
-              {errors.school && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.school}
-                </p>
-              )}
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Phone className="w-4 h-4 text-[#8C4B58]" />
-                  Contact Number *
+                  <User className="w-4 h-4 text-[#8C4B58]" />
+                  Student Name *
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="tel"
-                    name="contactNo"
-                    value={formData.contactNo}
-                    onChange={handleChange}
-                    placeholder="10-digit phone"
-                    autoComplete="tel"
-                    maxLength={10}
-                    className={`${inputBaseClass} ${
-                      errors.contactNo ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.contactNo && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.contactNo}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="flex items-center justify-between text-sm font-semibold text-[#2D1B2E]">
-                  <span className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4 text-[#8C4B58]" />
-                    WhatsApp *
-                  </span>
-                  {formData.contactNo && (
-                    <button
-                      type="button"
-                      onClick={handleCopyWhatsapp}
-                      className="text-xs text-[#8C4B58] hover:text-[#E8A86C] transition-colors"
-                    >
-                      Same as contact
-                    </button>
-                  )}
-                </label>
-                <div className="relative">
-                  <MessageCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <input
-                    type="tel"
-                    name="whatsappNo"
-                    value={formData.whatsappNo}
-                    onChange={handleChange}
-                    placeholder="WhatsApp number"
-                    autoComplete="tel"
-                    maxLength={10}
-                    className={`${inputBaseClass} ${
-                      errors.whatsappNo ? errorInputClass : normalInputClass
-                    }`}
-                  />
-                </div>
-                {errors.whatsappNo && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.whatsappNo}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <MapPin className="w-4 h-4 text-[#8C4B58]" />
-                  Place *
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                   <input
                     type="text"
-                    name="place"
-                    value={formData.place}
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
-                    placeholder="Enter your place"
-                    autoComplete="address-level2"
+                    placeholder="Enter student's full name"
+                    autoComplete="name"
                     className={`${inputBaseClass} ${
-                      errors.place ? errorInputClass : normalInputClass
+                      errors.name ? errorInputClass : normalInputClass
                     }`}
                   />
                 </div>
-                {errors.place && (
+                {errors.name && (
                   <p className="text-red-500 text-xs flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.place}
+                    {errors.name}
                   </p>
                 )}
               </div>
 
               <div className="space-y-1.5">
                 <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <MapPin className="w-4 h-4 text-[#8C4B58]" />
-                  State *
+                  <Mail className="w-4 h-4 text-[#8C4B58]" />
+                  Email *
                 </label>
                 <div className="relative">
-                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="state"
-                    value={formData.state}
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.state ? errorInputClass : normalInputClass
+                    placeholder="Enter email address"
+                    autoComplete="email"
+                    className={`${inputBaseClass} ${
+                      errors.email ? errorInputClass : normalInputClass
                     }`}
-                  >
-                    <option value="">Select state</option>
-                    {INDIAN_STATES.map((state) => (
-                      <option key={state} value={state}>
-                        {state}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
+                  />
                 </div>
-                {errors.state && (
+                {errors.email && (
                   <p className="text-red-500 text-xs flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.state}
+                    {errors.email}
                   </p>
                 )}
               </div>
 
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                  <Map className="w-4 h-4 text-[#8C4B58]" />
-                  District *
-                </label>
-                <div className="relative">
-                  <Map className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
-                  <select
-                    name="district"
-                    value={formData.district}
-                    onChange={handleChange}
-                    className={`${inputBaseClass} appearance-none cursor-pointer ${
-                      errors.district ? errorInputClass : normalInputClass
-                    }`}
-                  >
-                    <option value="">Select district</option>
-                    {(formData.state === "Karnataka"
-                      ? KARNATAKA_DISTRICTS
-                      : KERALA_DISTRICTS
-                    ).map((district) => (
-                      <option key={district} value={district}>
-                        {district}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-[#8C4B58]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+              {formData.courseType === "admission_repeaters_course" && (
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <BookOpen className="w-4 h-4 text-[#8C4B58]" />
+                    Select Stream *
+                  </label>
+                  <div className="relative">
+                    <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <select
+                      name="stream"
+                      value={formData.stream}
+                      onChange={handleChange}
+                      className={`${inputBaseClass} appearance-none cursor-pointer ${
+                        errors.stream ? errorInputClass : normalInputClass
+                      }`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
+                      <option value="">Select your stream</option>
+                      {STREAM_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-[#8C4B58]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
                   </div>
+                  {errors.stream && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.stream}
+                    </p>
+                  )}
                 </div>
-                {errors.district && (
-                  <p className="text-red-500 text-xs flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.district}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full mt-5 py-3.5 bg-gradient-to-r from-[#E8A86C] to-[#8C4B58] text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  Register for Admission
-                  <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
               )}
-            </button>
 
-            <p className="text-center text-xs text-gray-500 mt-3">
-              Your information is secure and will only be used for admission
-              registration.
-            </p>
-          </form>
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                  <School className="w-4 h-4 text-[#8C4B58]" />
+                  Current School *
+                </label>
+                <div className="relative">
+                  <School className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                  <input
+                    type="text"
+                    name="school"
+                    value={formData.school}
+                    onChange={handleChange}
+                    placeholder="Enter your school name"
+                    autoComplete="organization"
+                    className={`${inputBaseClass} ${
+                      errors.school ? errorInputClass : normalInputClass
+                    }`}
+                  />
+                </div>
+                {errors.school && (
+                  <p className="text-red-500 text-xs flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.school}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <Phone className="w-4 h-4 text-[#8C4B58]" />
+                    Contact Number *
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="tel"
+                      name="contactNo"
+                      value={formData.contactNo}
+                      onChange={handleChange}
+                      placeholder="10-digit phone"
+                      autoComplete="tel"
+                      maxLength={10}
+                      className={`${inputBaseClass} ${
+                        errors.contactNo ? errorInputClass : normalInputClass
+                      }`}
+                    />
+                  </div>
+                  {errors.contactNo && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.contactNo}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="flex items-center justify-between text-sm font-semibold text-[#2D1B2E]">
+                    <span className="flex items-center gap-2">
+                      <MessageCircle className="w-4 h-4 text-[#8C4B58]" />
+                      WhatsApp *
+                    </span>
+                    {formData.contactNo && (
+                      <button
+                        type="button"
+                        onClick={handleCopyWhatsapp}
+                        className="text-xs text-[#8C4B58] hover:text-[#E8A86C] transition-colors"
+                      >
+                        Same as contact
+                      </button>
+                    )}
+                  </label>
+                  <div className="relative">
+                    <MessageCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="tel"
+                      name="whatsappNo"
+                      value={formData.whatsappNo}
+                      onChange={handleChange}
+                      placeholder="WhatsApp number"
+                      autoComplete="tel"
+                      maxLength={10}
+                      className={`${inputBaseClass} ${
+                        errors.whatsappNo ? errorInputClass : normalInputClass
+                      }`}
+                    />
+                  </div>
+                  {errors.whatsappNo && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.whatsappNo}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <MapPin className="w-4 h-4 text-[#8C4B58]" />
+                    Place *
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="place"
+                      value={formData.place}
+                      onChange={handleChange}
+                      placeholder="Enter your place"
+                      autoComplete="address-level2"
+                      className={`${inputBaseClass} ${
+                        errors.place ? errorInputClass : normalInputClass
+                      }`}
+                    />
+                  </div>
+                  {errors.place && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.place}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <MapPin className="w-4 h-4 text-[#8C4B58]" />
+                    State *
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <select
+                      name="state"
+                      value={formData.state}
+                      onChange={handleChange}
+                      className={`${inputBaseClass} appearance-none cursor-pointer ${
+                        errors.state ? errorInputClass : normalInputClass
+                      }`}
+                    >
+                      <option value="">Select state</option>
+                      {INDIAN_STATES.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-[#8C4B58]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  {errors.state && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.state}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <Map className="w-4 h-4 text-[#8C4B58]" />
+                    District *
+                  </label>
+                  <div className="relative">
+                    <Map className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <select
+                      name="district"
+                      value={formData.district}
+                      onChange={handleChange}
+                      className={`${inputBaseClass} appearance-none cursor-pointer ${
+                        errors.district ? errorInputClass : normalInputClass
+                      }`}
+                    >
+                      <option value="">Select district</option>
+                      {(formData.state === "Karnataka"
+                        ? KARNATAKA_DISTRICTS
+                        : KERALA_DISTRICTS
+                      ).map((district) => (
+                        <option key={district} value={district}>
+                          {district}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-[#8C4B58]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  {errors.district && (
+                    <p className="text-red-500 text-xs flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.district}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                  <Target className="w-4 h-4 text-[#8C4B58]" />
+                  Ambition *
+                </label>
+                <div className="relative">
+                  <Target className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                  <input
+                    type="text"
+                    name="ambition"
+                    value={formData.ambition}
+                    onChange={handleChange}
+                    placeholder="What do you want to become?"
+                    className={`${inputBaseClass} ${
+                      errors.ambition ? errorInputClass : normalInputClass
+                    }`}
+                  />
+                </div>
+                {errors.ambition && (
+                  <p className="text-red-500 text-xs flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.ambition}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full mt-5 py-3.5 bg-gradient-to-r from-[#E8A86C] to-[#8C4B58] text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    Register for Admission
+                    <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </button>
+
+              <p className="text-center text-xs text-gray-500 mt-3">
+                Your information is secure and will only be used for admission
+                registration.
+              </p>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Success Toast Popup - outside section to avoid overflow-hidden clipping */}
+      {submitStatus === "success" && (
+        <div className="fixed top-6 right-6 z-50 animate-fade-in-up">
+          <div className="bg-white border border-green-200 rounded-xl shadow-2xl p-4 flex items-center gap-3 min-w-[280px]">
+            <div className="p-1.5 bg-green-100 rounded-full">
+              <CheckCircle2 className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-green-800 text-sm">
+                Registration Successful!
+              </p>
+              <p className="text-green-600 text-xs">
+                We&apos;ll contact you soon.
+              </p>
+            </div>
+            <button
+              onClick={() => setSubmitStatus("idle")}
+              className="ml-auto text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
