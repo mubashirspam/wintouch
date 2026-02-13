@@ -14,6 +14,7 @@ import {
   Loader2,
   Sparkles,
   BookOpen,
+  Mail,
 } from "lucide-react";
 
 const KERALA_DISTRICTS = [
@@ -64,6 +65,7 @@ const STREAM_OPTIONS = [
 interface FormData {
   courseType: string;
   name: string;
+  email: string;
   school: string;
   contactNo: string;
   whatsappNo: string;
@@ -76,6 +78,7 @@ interface FormData {
 interface FormErrors {
   courseType?: string;
   name?: string;
+  email?: string;
   school?: string;
   contactNo?: string;
   whatsappNo?: string;
@@ -97,6 +100,7 @@ export default function AdmissionForm({
   const [formData, setFormData] = useState<FormData>({
     courseType: "",
     name: "",
+    email: "",
     school: "",
     contactNo: "",
     whatsappNo: "",
@@ -120,11 +124,22 @@ export default function AdmissionForm({
     return phoneRegex.test(phone.replace(/\s/g, ""));
   };
 
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
       newErrors.name = "Student name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
     }
 
     if (!formData.school.trim()) {
@@ -185,6 +200,7 @@ export default function AdmissionForm({
       const payload: Record<string, string> = {
         type: formData.courseType,
         name: formData.name,
+        email: formData.email,
         school: formData.school,
         contactNo: formData.contactNo,
         whatsappNo: formData.whatsappNo,
@@ -199,16 +215,14 @@ export default function AdmissionForm({
         payload.stream = formData.stream;
       }
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/leads/admissions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
+      const response = await fetch(`${baseUrl}/leads/admissions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await response.json();
 
@@ -217,6 +231,7 @@ export default function AdmissionForm({
         setFormData({
           courseType: "",
           name: "",
+          email: "",
           school: "",
           contactNo: "",
           whatsappNo: "",
@@ -427,6 +442,33 @@ export default function AdmissionForm({
                 <p className="text-red-500 text-xs flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
                   {errors.name}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                <Mail className="w-4 h-4 text-[#8C4B58]" />
+                Email *
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter email address"
+                  autoComplete="email"
+                  className={`${inputBaseClass} ${
+                    errors.email ? errorInputClass : normalInputClass
+                  }`}
+                />
+              </div>
+              {errors.email && (
+                <p className="text-red-500 text-xs flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.email}
                 </p>
               )}
             </div>
