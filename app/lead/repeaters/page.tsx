@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ScholarshipFormModal } from "@/app/components/ui";
+import Link from "next/link";
 import {
   Phone,
   MapPin,
@@ -30,7 +30,6 @@ const SEATS_LEFT = 23;
 
 export default function RepeatersLeadPage() {
   const [activeFeature, setActiveFeature] = useState(0);
-  const [isScholarshipOpen, setIsScholarshipOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -166,14 +165,14 @@ export default function RepeatersLeadPage() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-                <button
-                  onClick={() => setIsScholarshipOpen(true)}
+                <Link
+                  href="/lead/repeaters/form"
                   className="group inline-flex items-center justify-center gap-3 px-8 py-5 bg-[#E8A86C] text-[#2D1B2E] rounded-2xl font-bold text-lg shadow-lg hover:bg-[#d4975f] transition-colors duration-200 active:scale-95"
                 >
                   <Play className="w-5 h-5" />
                   Join Now
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
                 <a
                   href="tel:+919330500400"
                   className="inline-flex items-center justify-center gap-3 px-8 py-5 bg-white/10 backdrop-blur-sm text-white rounded-2xl font-bold text-lg hover:bg-white/20 transition-colors duration-200 active:scale-95"
@@ -416,14 +415,14 @@ export default function RepeatersLeadPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <button
-                onClick={() => setIsScholarshipOpen(true)}
+              <Link
+                href="/lead/repeaters/form"
                 className="group inline-flex items-center justify-center gap-3 px-10 py-6 bg-[#E8A86C] text-[#2D1B2E] rounded-2xl font-bold text-xl shadow-lg hover:bg-[#d4975f] transition-colors duration-200 active:scale-95"
               >
                 <CheckCircle2 className="w-6 h-6" />
                 Apply Now
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </div>
 
             {/* Contact Info */}
@@ -459,19 +458,19 @@ export default function RepeatersLeadPage() {
             <Phone className="w-5 h-5" />
             Call Now
           </a>
-          <button
-            onClick={() => setIsScholarshipOpen(true)}
+          <Link
+            href="/lead/repeaters/form"
             className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-4 bg-[#E8A86C] text-[#2D1B2E] rounded-xl font-bold"
           >
             Apply Now
             <ArrowRight className="w-5 h-5" />
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* Floating Apply Button - Desktop */}
-      <button
-        onClick={() => setIsScholarshipOpen(true)}
+      <Link
+        href="/lead/repeaters/form"
         className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col items-center gap-2 p-4 bg-gradient-to-br from-[#8C4B58] to-[#E8A86C] rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200"
       >
         <div className="p-3 bg-white/10 rounded-full">
@@ -479,13 +478,7 @@ export default function RepeatersLeadPage() {
         </div>
         <span className="text-white font-black text-sm">APPLY</span>
         <span className="text-white font-black text-sm">NOW</span>
-      </button>
-
-      {/* Scholarship Form Modal */}
-      <ScholarshipFormModal
-        isOpen={isScholarshipOpen}
-        onClose={() => setIsScholarshipOpen(false)}
-      />
+      </Link>
     </div>
   );
 }

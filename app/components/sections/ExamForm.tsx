@@ -106,14 +106,16 @@ interface FormErrors {
 interface ExamFormProps {
   onSuccess?: () => void;
   variant?: "embedded" | "standalone";
+  defaultCourseType?: string;
 }
 
 export default function ExamForm({
   onSuccess,
   variant = "embedded",
+  defaultCourseType = "",
 }: ExamFormProps) {
   const [formData, setFormData] = useState<FormData>({
-    courseType: "",
+    courseType: defaultCourseType,
     name: "",
     dob: "",
     contactNo: "",
