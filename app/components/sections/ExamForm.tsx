@@ -272,6 +272,40 @@ export default function ExamForm({
 
       if (response.ok) {
         setSubmitStatus("success");
+
+        // Build WhatsApp message summary
+        const courseLabel =
+          COURSE_OPTIONS.find((c) => c.value === formData.courseType)?.label ||
+          formData.courseType;
+        const whatsappMessage = [
+          `📋 *New Exam Registration*`,
+          ``,
+          `👤 *Student:* ${formData.name}`,
+          `📅 *DOB:* ${formData.dob}`,
+          `📞 *Contact:* ${formData.contactNo}`,
+          `💬 *WhatsApp:* ${formData.whatsappNo}`,
+          `📧 *Email:* ${formData.email}`,
+          ``,
+          `👨‍👩‍👧 *Parent:* ${formData.parentName} (${formData.parentOccupation})`,
+          `🏫 *School:* ${formData.school}`,
+          `📍 *Location:* ${formData.district}, ${formData.state}`,
+          `📖 *Board:* ${formData.board}`,
+          `🎓 *Course:* ${courseLabel}`,
+          ...(formData.stream ? [`🔬 *Stream:* ${formData.stream}`] : []),
+          `🎯 *Ambition:* ${formData.ambition}`,
+          ``,
+          `✅ NEET Coaching Interest: ${formData.interestedInNeetCoaching === "yes" ? "Yes" : "No"}`,
+          `🏠 Hostel Interest: ${formData.interestedInStayingHostel === "yes" ? "Yes" : "No"}`,
+          ...(formData.courseType === "exam_twelfth"
+            ? [
+                `📝 Attended NEET Before: ${formData.attendNeetCoachingBefore === "yes" ? "Yes" : "No"}`,
+              ]
+            : []),
+        ].join("\n");
+
+        const whatsappUrl = `https://wa.me/919330500400?text=${encodeURIComponent(whatsappMessage)}`;
+        window.open(whatsappUrl, "_blank");
+
         setFormData({
           courseType: "",
           name: "",
