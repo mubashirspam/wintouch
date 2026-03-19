@@ -185,7 +185,7 @@ export default function InstantLeadPage() {
           const data = await response.json();
           if (data.message) message = data.message;
         } catch {
-          // response wasn't JSON
+
         }
         setSubmitStatus("error");
         setErrorMessage(message);
