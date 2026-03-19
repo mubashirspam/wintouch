@@ -40,7 +40,7 @@ export default function Admissions() {
       icon: Heart,
       gradient: "from-[#8C4B58] to-[#E8A86C]",
       shadowColor: "shadow-[#8C4B58]/30",
-      link: "/lead/repeaters",
+      link: "/lead/instant",
       features: ["Daily Mock Tests", "Expert Faculty", "Doubt Clearing"],
     },
     {
@@ -54,7 +54,7 @@ export default function Admissions() {
       icon: BookOpen,
       gradient: "from-[#E8A86C] to-[#8C4B58]",
       shadowColor: "shadow-[#E8A86C]/30",
-      link: "/lead/integrated",
+      link: "/lead/instant",
       features: ["Board + NEET", "Science Stream", "Holistic Development"],
     },
   ];

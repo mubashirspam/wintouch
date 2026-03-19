@@ -72,7 +72,7 @@ const BannerContent = () => (
 export default function RegistrationBanner() {
   return (
     <Link
-      href="/admissions"
+      href="/lead/instant"
       className="block bg-[#8C4B58] text-[#FFFBF0] py-2.5 overflow-hidden relative z-[60] cursor-pointer border-b border-[#E8A86C]/20"
     >
       <div className="flex w-fit">

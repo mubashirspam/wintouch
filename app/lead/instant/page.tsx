@@ -12,44 +12,83 @@ import {
   Loader2,
   CheckCircle2,
   MessageCircle,
+  MapPin,
+  Briefcase,
+  School,
+  GraduationCap,
+  ChevronDown,
 } from "lucide-react";
 
 const COURSE_OPTIONS = [
-  {
-    value: "admission_repeaters_course",
-    label: "Repeaters Course (For Students in Class 12)",
-  },
-  {
-    value: "admission_integrated_plus_one_plus_two",
-    label: "Integrated Plus One & Two (For Students in Class 10)",
-  },
+  { value: "repeaters", label: "Repeaters Course" },
+  { value: "integrated_plus_one_plus_two", label: "Integrated Plus One & Two" },
+  { value: "plustwo_lateral", label: "Plus Two Lateral" },
+  { value: "regular_science", label: "Regular Science" },
+];
+
+const YES_NO_OPTIONS = [
+  { value: "", label: "Select" },
+  { value: "yes", label: "Yes" },
+  { value: "no", label: "No" },
 ];
 
 interface FormData {
-  courseType: string;
+  type: string;
   name: string;
   email: string;
-  whatsappNo: string;
+  phone: string;
+  whatsapp: string;
   dob: string;
+  contact1: string;
+  contact2: string;
+  parentName: string;
+  parentOccupation: string;
+  school: string;
+  district: string;
+  state: string;
+  board: string;
+  place: string;
+  ambition: string;
+  studyingClass: string;
+  stream: string;
+  attendNeetCoachingBefore: string;
+  interestedInNeetCoaching: string;
+  interestedInStayingHostel: string;
 }
 
 interface FormErrors {
-  courseType?: string;
+  type?: string;
   name?: string;
   email?: string;
-  whatsappNo?: string;
-  dob?: string;
+  phone?: string;
 }
 
-export default function InstantLeadPage() {
-  const [formData, setFormData] = useState<FormData>({
-    courseType: "",
-    name: "",
-    email: "",
-    whatsappNo: "",
-    dob: "",
-  });
+const initialFormData: FormData = {
+  type: "",
+  name: "",
+  email: "",
+  phone: "",
+  whatsapp: "",
+  dob: "",
+  contact1: "",
+  contact2: "",
+  parentName: "",
+  parentOccupation: "",
+  school: "",
+  district: "",
+  state: "",
+  board: "",
+  place: "",
+  ambition: "",
+  studyingClass: "",
+  stream: "",
+  attendNeetCoachingBefore: "",
+  interestedInNeetCoaching: "",
+  interestedInStayingHostel: "",
+};
 
+export default function InstantLeadPage() {
+  const [formData, setFormData] = useState<FormData>({ ...initialFormData });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
@@ -71,8 +110,8 @@ export default function InstantLeadPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.courseType) {
-      newErrors.courseType = "Please select a course";
+    if (!formData.type) {
+      newErrors.type = "Please select a course";
     }
 
     if (!formData.name.trim()) {
@@ -85,14 +124,10 @@ export default function InstantLeadPage() {
       newErrors.email = "Please enter a valid email address";
     }
 
-    if (!formData.whatsappNo) {
-      newErrors.whatsappNo = "WhatsApp number is required";
-    } else if (!isValidPhone(formData.whatsappNo)) {
-      newErrors.whatsappNo = "Please enter a valid 10-digit phone number";
-    }
-
-    if (!formData.dob) {
-      newErrors.dob = "Date of birth is required";
+    if (!formData.phone) {
+      newErrors.phone = "Phone number is required";
+    } else if (!isValidPhone(formData.phone)) {
+      newErrors.phone = "Please enter a valid 10-digit phone number";
     }
 
     setErrors(newErrors);
@@ -109,22 +144,30 @@ export default function InstantLeadPage() {
     setErrorMessage("");
 
     try {
-      const payload = {
-        type: formData.courseType,
+      // Build payload, only include non-empty optional fields
+      const payload: Record<string, string> = {
+        type: formData.type,
         name: formData.name,
         email: formData.email,
-        school: '',
-        contactNo: '',
-        whatsappNo: formData.whatsappNo,
-        place: '',
-        district: '',
-        ambition: '',
-        stream: '',
-        // dob: formData.dob,
+        phone: formData.phone,
       };
 
-       const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
-      const response = await fetch(`${baseUrl}/leads/admissions`, {
+      const optionalFields: (keyof FormData)[] = [
+        "whatsapp", "dob", "contact1", "contact2",
+        "parentName", "parentOccupation", "school", "district",
+        "state", "board", "place", "ambition", "studyingClass",
+        "stream", "attendNeetCoachingBefore", "interestedInNeetCoaching",
+        "interestedInStayingHostel",
+      ];
+
+      for (const field of optionalFields) {
+        if (formData[field]) {
+          payload[field] = formData[field];
+        }
+      }
+
+      const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
+      const response = await fetch(`${baseUrl}/leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,24 +175,23 @@ export default function InstantLeadPage() {
         body: JSON.stringify(payload),
       });
 
-
-      const data = await response.json();
-
       if (response.ok) {
         setSubmittedData({ ...formData });
         setSubmitStatus("success");
-        setFormData({
-          courseType: "",
-          name: "",
-          email: "",
-          whatsappNo: "",
-          dob: "",
-        });
+        setFormData({ ...initialFormData });
       } else {
+        let message = "Something went wrong. Please try again.";
+        try {
+          const data = await response.json();
+          if (data.message) message = data.message;
+        } catch {
+          // response wasn't JSON
+        }
         setSubmitStatus("error");
-        setErrorMessage(data.message || "Something went wrong. Please try again.");
+        setErrorMessage(message);
       }
-    } catch {
+    } catch (err) {
+      console.error("Lead form submission error:", err);
       setSubmitStatus("error");
       setErrorMessage("Network error. Please check your connection and try again.");
     } finally {
@@ -170,16 +212,15 @@ export default function InstantLeadPage() {
   const handleWhatsAppConnect = () => {
     if (!submittedData) return;
     const courseLabel =
-      COURSE_OPTIONS.find((c) => c.value === submittedData.courseType)?.label ||
-      submittedData.courseType;
+      COURSE_OPTIONS.find((c) => c.value === submittedData.type)?.label ||
+      submittedData.type;
     const message = [
-      `📋 *New Lead Registration*`,
+      `*New Registration*`,
       ``,
-      `👤 *Name:* ${submittedData.name}`,
-      `📧 *Email:* ${submittedData.email}`,
-      `💬 *WhatsApp:* ${submittedData.whatsappNo}`,
-      `📅 *DOB:* ${submittedData.dob}`,
-      `🎓 *Course:* ${courseLabel}`,
+      `*Name:* ${submittedData.name}`,
+      `*Email:* ${submittedData.email}`,
+      `*Phone:* ${submittedData.phone}`,
+      `*Course:* ${courseLabel}`,
     ].join("\n");
     window.open(
       `https://wa.me/919330500400?text=${encodeURIComponent(message)}`,
@@ -194,8 +235,18 @@ export default function InstantLeadPage() {
 
   const inputBaseClass =
     "w-full px-4 py-3 pl-11 bg-white border-2 rounded-xl text-[#2D1B2E] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E8A86C] focus:border-transparent transition-all duration-300 text-sm";
+  const inputNoIconClass =
+    "w-full px-4 py-3 bg-white border-2 rounded-xl text-[#2D1B2E] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E8A86C] focus:border-transparent transition-all duration-300 text-sm";
   const errorInputClass = "border-red-400 bg-red-50/50";
   const normalInputClass = "border-[#E8A86C]/30 hover:border-[#E8A86C]/60";
+
+  const selectClass = `${inputBaseClass} appearance-none cursor-pointer`;
+
+  const SelectChevron = () => (
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+      <ChevronDown className="w-4 h-4 text-[#8C4B58]" />
+    </div>
+  );
 
   if (submitStatus === "success" && submittedData) {
     return (
@@ -250,7 +301,7 @@ export default function InstantLeadPage() {
 
   return (
     <div className="min-h-screen bg-[#FFFBF0] flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black text-[#2D1B2E] mb-2">
             Quick Registration
@@ -273,8 +324,10 @@ export default function InstantLeadPage() {
             </div>
           )}
 
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            {/* Course */}
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+            {/* === Required Fields === */}
+
+            {/* Course Type */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                 <BookOpen className="w-4 h-4 text-[#8C4B58]" />
@@ -283,11 +336,11 @@ export default function InstantLeadPage() {
               <div className="relative">
                 <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                 <select
-                  name="courseType"
-                  value={formData.courseType}
+                  name="type"
+                  value={formData.type}
                   onChange={handleChange}
-                  className={`${inputBaseClass} appearance-none cursor-pointer ${
-                    errors.courseType ? errorInputClass : normalInputClass
+                  className={`${selectClass} ${
+                    errors.type ? errorInputClass : normalInputClass
                   }`}
                 >
                   <option value="">Select your course</option>
@@ -297,26 +350,12 @@ export default function InstantLeadPage() {
                     </option>
                   ))}
                 </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-[#8C4B58]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
+                <SelectChevron />
               </div>
-              {errors.courseType && (
+              {errors.type && (
                 <p className="text-red-500 text-xs flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
-                  {errors.courseType}
+                  {errors.type}
                 </p>
               )}
             </div>
@@ -377,59 +416,343 @@ export default function InstantLeadPage() {
               )}
             </div>
 
-            {/* WhatsApp */}
+            {/* Phone */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
                 <Phone className="w-4 h-4 text-[#8C4B58]" />
-                WhatsApp Number *
+                Phone Number *
               </label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
                 <input
                   type="tel"
-                  name="whatsappNo"
-                  value={formData.whatsappNo}
+                  name="phone"
+                  value={formData.phone}
                   onChange={handleChange}
-                  placeholder="10-digit WhatsApp number"
+                  placeholder="10-digit phone number"
                   autoComplete="tel"
                   maxLength={10}
                   className={`${inputBaseClass} ${
-                    errors.whatsappNo ? errorInputClass : normalInputClass
+                    errors.phone ? errorInputClass : normalInputClass
                   }`}
                 />
               </div>
-              {errors.whatsappNo && (
+              {errors.phone && (
                 <p className="text-red-500 text-xs flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
-                  {errors.whatsappNo}
+                  {errors.phone}
                 </p>
               )}
             </div>
 
-            {/* DOB */}
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
-                <Calendar className="w-4 h-4 text-[#8C4B58]" />
-                Date of Birth *
-              </label>
-              <div className="relative">
-                <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+            {/* === Optional Fields === */}
+            <div className="border-t border-[#E8A86C]/20 pt-5 mt-5">
+              <p className="text-xs text-gray-400 mb-4">Optional Details</p>
+
+              {/* WhatsApp & DOB row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                {/* WhatsApp */}
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <MessageCircle className="w-4 h-4 text-[#8C4B58]" />
+                    WhatsApp
+                  </label>
+                  <div className="relative">
+                    <MessageCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="tel"
+                      name="whatsapp"
+                      value={formData.whatsapp}
+                      onChange={handleChange}
+                      placeholder="WhatsApp number"
+                      maxLength={10}
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+
+                {/* DOB */}
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <Calendar className="w-4 h-4 text-[#8C4B58]" />
+                    Date of Birth
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="date"
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleChange}
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Alternative contacts row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Alt Contact 1
+                  </label>
+                  <input
+                    type="tel"
+                    name="contact1"
+                    value={formData.contact1}
+                    onChange={handleChange}
+                    placeholder="10-digit number"
+                    maxLength={10}
+                    className={`${inputNoIconClass} ${normalInputClass}`}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Alt Contact 2
+                  </label>
+                  <input
+                    type="tel"
+                    name="contact2"
+                    value={formData.contact2}
+                    onChange={handleChange}
+                    placeholder="10-digit number"
+                    maxLength={10}
+                    className={`${inputNoIconClass} ${normalInputClass}`}
+                  />
+                </div>
+              </div>
+
+              {/* Parent info row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <User className="w-4 h-4 text-[#8C4B58]" />
+                    Parent Name
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="parentName"
+                      value={formData.parentName}
+                      onChange={handleChange}
+                      placeholder="Parent's name"
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <Briefcase className="w-4 h-4 text-[#8C4B58]" />
+                    Parent Occupation
+                  </label>
+                  <div className="relative">
+                    <Briefcase className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="parentOccupation"
+                      value={formData.parentOccupation}
+                      onChange={handleChange}
+                      placeholder="Occupation"
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* School & Board row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <School className="w-4 h-4 text-[#8C4B58]" />
+                    School
+                  </label>
+                  <div className="relative">
+                    <School className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="school"
+                      value={formData.school}
+                      onChange={handleChange}
+                      placeholder="School name"
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Board
+                  </label>
+                  <input
+                    type="text"
+                    name="board"
+                    value={formData.board}
+                    onChange={handleChange}
+                    placeholder="e.g. CBSE, State"
+                    className={`${inputNoIconClass} ${normalInputClass}`}
+                  />
+                </div>
+              </div>
+
+              {/* Studying Class & Stream row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <GraduationCap className="w-4 h-4 text-[#8C4B58]" />
+                    Studying Class
+                  </label>
+                  <div className="relative">
+                    <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="studyingClass"
+                      value={formData.studyingClass}
+                      onChange={handleChange}
+                      placeholder="e.g. Class 10"
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Stream
+                  </label>
+                  <input
+                    type="text"
+                    name="stream"
+                    value={formData.stream}
+                    onChange={handleChange}
+                    placeholder="e.g. Science"
+                    className={`${inputNoIconClass} ${normalInputClass}`}
+                  />
+                </div>
+              </div>
+
+              {/* Place, District, State row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#2D1B2E]">
+                    <MapPin className="w-4 h-4 text-[#8C4B58]" />
+                    Place
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C4B58]" />
+                    <input
+                      type="text"
+                      name="place"
+                      value={formData.place}
+                      onChange={handleChange}
+                      placeholder="Place"
+                      className={`${inputBaseClass} ${normalInputClass}`}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    District
+                  </label>
+                  <input
+                    type="text"
+                    name="district"
+                    value={formData.district}
+                    onChange={handleChange}
+                    placeholder="District"
+                    className={`${inputNoIconClass} ${normalInputClass}`}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="State"
+                    className={`${inputNoIconClass} ${normalInputClass}`}
+                  />
+                </div>
+              </div>
+
+              {/* Ambition */}
+              <div className="space-y-1.5 mb-4">
+                <label className="text-sm font-semibold text-[#2D1B2E]">
+                  Ambition
+                </label>
                 <input
-                  type="date"
-                  name="dob"
-                  value={formData.dob}
+                  type="text"
+                  name="ambition"
+                  value={formData.ambition}
                   onChange={handleChange}
-                  className={`${inputBaseClass} ${
-                    errors.dob ? errorInputClass : normalInputClass
-                  }`}
+                  placeholder="e.g. Doctor, Engineer"
+                  className={`${inputNoIconClass} ${normalInputClass}`}
                 />
               </div>
-              {errors.dob && (
-                <p className="text-red-500 text-xs flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.dob}
-                </p>
-              )}
+
+              {/* Yes/No questions */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Attended NEET Coaching?
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="attendNeetCoachingBefore"
+                      value={formData.attendNeetCoachingBefore}
+                      onChange={handleChange}
+                      className={`${inputNoIconClass} appearance-none cursor-pointer ${normalInputClass}`}
+                    >
+                      {YES_NO_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <SelectChevron />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Interested in NEET?
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="interestedInNeetCoaching"
+                      value={formData.interestedInNeetCoaching}
+                      onChange={handleChange}
+                      className={`${inputNoIconClass} appearance-none cursor-pointer ${normalInputClass}`}
+                    >
+                      {YES_NO_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <SelectChevron />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-[#2D1B2E]">
+                    Interested in Hostel?
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="interestedInStayingHostel"
+                      value={formData.interestedInStayingHostel}
+                      onChange={handleChange}
+                      className={`${inputNoIconClass} appearance-none cursor-pointer ${normalInputClass}`}
+                    >
+                      {YES_NO_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <SelectChevron />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Submit */}

@@ -1,10 +1,9 @@
 import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
-import { ExamForm } from "@/app/components/sections";
 
 export const metadata = {
-  title: "NEET Scholarship Exam - Wintouch Academy",
+  title: "NEET Scholarship - Wintouch Academy",
   description:
-    "Register for the NEET Scholarship Exam and win up to ₹50 Lakhs in scholarships. Join Kerala's premier girls-only residential NEET coaching academy.",
+    "Win up to ₹50 Lakhs in scholarships. Join Kerala's premier girls-only residential NEET coaching academy.",
 };
 
 export default function ScholarshipPage() {
@@ -41,8 +40,6 @@ export default function ScholarshipPage() {
           </div>
         </section>
 
-        {/* Embedded Form */}
-        <ExamForm variant="embedded" />
       </main>
 
       <Footer />

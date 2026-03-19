@@ -66,7 +66,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/admissions">
+          <Link href="/lead/instant">
             <Button variant="primary" className="py-2 px-6 text-sm">
               Apply Now
             </Button>
@@ -99,7 +99,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/admissions" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link href="/lead/instant" onClick={() => setIsMobileMenuOpen(false)}>
             <Button className="w-full mt-2">Apply Now</Button>
           </Link>
           <a
