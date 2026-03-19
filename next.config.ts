@@ -11,8 +11,13 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "api.dicebear.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.wintouchacademy.com",
+      },
     ],
   },
 };
 
 export default nextConfig;
+

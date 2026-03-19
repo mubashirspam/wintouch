@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+
 import {
   Phone,
   Mail,
@@ -35,12 +35,12 @@ export default function Admissions() {
       subtitle: "NEET Coaching Repeaters",
       description:
         "Plus Two Science കഴിഞ്ഞ വിദ്യാർഥിനികൾക്ക് intensive NEET preparation",
-      duration: "1-2 Years",
+      duration: "1 Year",
       forWhom: "Plus Two Science Students",
       icon: Heart,
       gradient: "from-[#8C4B58] to-[#E8A86C]",
       shadowColor: "shadow-[#8C4B58]/30",
-      link: "/lead/repeaters",
+      link: "/lead/instant",
       features: ["Daily Mock Tests", "Expert Faculty", "Doubt Clearing"],
     },
     {
@@ -54,7 +54,7 @@ export default function Admissions() {
       icon: BookOpen,
       gradient: "from-[#E8A86C] to-[#8C4B58]",
       shadowColor: "shadow-[#E8A86C]/30",
-      link: "/lead/integrated",
+      link: "/lead/instant",
       features: ["Board + NEET", "Science Stream", "Holistic Development"],
     },
   ];
@@ -94,7 +94,7 @@ export default function Admissions() {
             <Link
               key={program.id}
               href={program.link}
-              className={`group relative bg-white rounded-3xl overflow-hidden border-2 border-transparent hover:border-[#E8A86C]/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${program.shadowColor}`}
+              className={`group relative bg-[#E8A86C]/10 rounded-3xl overflow-hidden border-2 border-[#E8A86C]/20 hover:border-[#E8A86C]/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${program.shadowColor}`}
               style={{ animationDelay: `${index * 0.15}s` }}
             >
               {/* Card Header Gradient */}
@@ -174,49 +174,81 @@ export default function Admissions() {
           ))}
         </div>
 
-        {/* Contact Info Bar */}
-        <div className="max-w-4xl mx-auto bg-[#2D1B2E] rounded-3xl p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#8C4B58] rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2" />
+        {/* Contact Info CTA */}
+        <div className="max-w-5xl mx-auto bg-gradient-to-br from-[#2D1B2E] to-[#4A2F4A] rounded-3xl p-8 md:p-10 relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-72 h-72 bg-[#E8A86C]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#8C4B58]/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 relative rounded-2xl overflow-hidden bg-white p-2">
-                <Image
-                  src="/logo.png"
-                  alt="Wintouch Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-white">
-                  Wintouch Academy
-                </h4>
-                <p className="text-white/60 text-sm">
-                  Residential Campus for Girls
-                </p>
-              </div>
+          <div className="relative z-10">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Ready to Begin Your Journey?
+              </h3>
+              <p className="text-white/70">
+                Contact us today for admissions or any queries
+              </p>
             </div>
-
-            <div className="flex flex-wrap items-center gap-6 text-white/80 text-sm">
+            {/* Contact Options Grid */}
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              {/* Phone */}
               <a
-                href="tel:9330500400"
-                className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
+                href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, "")}`}
+                className="group flex flex-col items-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/20 hover:border-[#E8A86C]/30 transition-all duration-300"
               >
-                <Phone className="w-4 h-4 text-[#E8A86C]" />
-                <span>9330 500 400</span>
+                <div className="p-3 bg-[#E8A86C]/20 rounded-full group-hover:bg-[#E8A86C]/30 transition-colors">
+                  <Phone className="w-6 h-6 text-[#E8A86C]" />
+                </div>
+                <div className="text-center">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                    Call Us
+                  </p>
+                  <p className="text-white font-semibold">
+                    {CONTACT_INFO.phone}
+                  </p>
+                  {CONTACT_INFO.phoneAlt && (
+                    <p className="text-white/80 text-sm">
+                      {CONTACT_INFO.phoneAlt}
+                    </p>
+                  )}
+                </div>
               </a>
+
+              {/* Email */}
               <a
                 href={`mailto:${CONTACT_INFO.admissionEmail}`}
-                className="flex items-center gap-2 hover:text-[#E8A86C] transition-colors"
+                className="group flex flex-col items-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/20 hover:border-[#E8A86C]/30 transition-all duration-300"
               >
-                <Mail className="w-4 h-4 text-[#E8A86C]" />
-                <span>{CONTACT_INFO.admissionEmail}</span>
+                <div className="p-3 bg-[#E8A86C]/20 rounded-full group-hover:bg-[#E8A86C]/30 transition-colors">
+                  <Mail className="w-6 h-6 text-[#E8A86C]" />
+                </div>
+                <div className="text-center">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                    Email Us
+                  </p>
+                  <p className="text-white font-semibold text-sm break-all">
+                    {CONTACT_INFO.admissionEmail}
+                  </p>
+                </div>
               </a>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#E8A86C]" />
-                <span>Manya, Kasaragod</span>
+
+              {/* Location */}
+              <div className="group flex flex-col items-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10">
+                <div className="p-3 bg-[#E8A86C]/20 rounded-full">
+                  <MapPin className="w-6 h-6 text-[#E8A86C]" />
+                </div>
+                <div className="text-center">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                    Visit Us
+                  </p>
+                  <p className="text-white/90 text-sm">{CONTACT_INFO.campus}</p>
+                </div>
               </div>
+            </div>{" "}
+            {/* Additional Info */}
+            <div className="text-center pt-4 border-t border-white/10">
+              <p className="text-white/60 text-sm">📍 {CONTACT_INFO.address}</p>
             </div>
           </div>
         </div>

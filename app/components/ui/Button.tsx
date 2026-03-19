@@ -15,7 +15,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants: Record<string, string> = {
       primary:
-        "bg-[#8C4B58]/80 text-white hover:bg-[#8C4B58]/90 shadow-lg shadow-[#8C4B58]/25 hover:shadow-xl hover:shadow-[#8C4B58]/30",
+        "bg-[#8C4B58]/80 text-white hover:bg-[#8C4B58]/90 hover:shadow-[#8C4B58]/30",
       secondary:
         "bg-white/20 backdrop-blur-xl border border-white/30 text-[#2D1B2E] hover:bg-white/40",
       accent:

@@ -2,16 +2,14 @@ import { Navbar, Footer, RegistrationBanner } from "@/app/components/layout";
 import {
   Hero,
   About,
-  VisionMission,
   Programs,
-  UniqueFeatures,
-  Testimonials,
   Admissions,
   FAQ,
   ImageGallery,
   Team,
-  ScholarshipForm,
+  AdmissionForm,
 } from "@/app/components/sections";
+import { ScholarshipPopup } from "@/app/components/ui";
 
 export const metadata = {
   title: "Wintouch Academy - Empowering Young Women Through Excellence",
@@ -28,18 +26,19 @@ export default function HomePage() {
       <main>
         <Hero />
         <About />
-        <VisionMission />
-        <Programs />
-        <UniqueFeatures />
-        <Team />
-        <Testimonials />
         <ImageGallery />
+        <Programs />
+        {/* <UniqueFeatures /> */}
+        <Team />
+        {/* <Testimonials /> */}
+
         <Admissions />
-        <ScholarshipForm />
+        <AdmissionForm />
         <FAQ />
       </main>
 
       <Footer />
+      <ScholarshipPopup />
     </div>
   );
 }

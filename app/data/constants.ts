@@ -63,6 +63,10 @@ export const NAV_LINKS: NavLink[] = [
   { id: "admissions", label: "Admissions" },
 ];
 
+// WhatsApp Link
+export const WHATSAPP_LINK =
+  "https://wa.me/919330500400?text=Hi%2C%20I%20am%20interested%20in%20Wintouch%20Academy";
+
 // Programs Data
 export const PROGRAMS: Program[] = [
   {
@@ -75,7 +79,7 @@ export const PROGRAMS: Program[] = [
       "Expert Faculty from Kota/Kerala",
       "Doubt Clearing Sessions",
     ],
-    duration: "1-2 Years",
+    duration: "1 Year",
     icon: React.createElement(Heart, { className: "w-6 h-6 text-white" }),
   },
   {
@@ -158,40 +162,40 @@ export const UNIQUE_FEATURES: UniqueFeature[] = [
 // Gallery Images
 export const GALLERY_IMAGES: GalleryImage[] = [
   {
-    src: "/01133.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_1.jpeg",
     alt: "Campus Life",
     label: "Campus Life",
     colSpan: 2,
     rowSpan: 2,
   },
   {
-    src: "/0294.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_2.jpeg",
     alt: "Student Activities",
     label: "Student Activities",
   },
   {
-    src: "/0367.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_3.jpeg",
     alt: "Learning Environment",
     label: "Learning Environment",
   },
   {
-    src: "/0406.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_4.jpeg",
     alt: "Campus Grounds",
     label: "Beautiful Campus",
     colSpan: 2,
   },
   {
-    src: "/0716.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_5.jpeg",
     alt: "Academy Life",
     label: "Academy Life",
   },
   {
-    src: "/0728.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_6.jpeg",
     alt: "Student Community",
     label: "Student Community",
   },
   {
-    src: "/01196.JPG",
+    src: "https://cdn.wintouchacademy.com/public/site-assets/gallery_7.jpeg",
     alt: "Campus Events",
     label: "Campus Events",
     colSpan: 2,
@@ -234,11 +238,12 @@ export const FAQ_QUESTIONS = [
 
 // Contact Information
 export const CONTACT_INFO = {
-  phone: "+91 98765 43210",
-  email: "info@wintouch.edu",
-  admissionEmail: "admissions@wintouch.edu",
-  address: "123 Education City, Kerala, India 673004",
-  campus: "Wintouch Campus, Kerala",
+  phone: "9330 500 400",
+  phoneAlt: "7306 342 571",
+  email: "wintouchacademy@gmail.com",
+  admissionEmail: "wintouchacademy@gmail.com",
+  address: "Wintouch Palm Meadows, Manya, Kasaragod, Kerala - 671321",
+  campus: "Wintouch Palm Meadows, Manya, Kasaragod",
 };
 
 // Footer Links
@@ -267,90 +272,41 @@ export interface TeamMember {
   isFeatured?: boolean;
 }
 
-// Team Members Data
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: 1,
-    name: "Dr. Fathima Zahra",
-    role: "Founder & CEO",
+    name: "Abdul Latheef Uppala",
+    role: "Chairman",
     department: "Leadership",
-    image: "/team/member-1.png",
-    bio: "Visionary educationist with 20+ years of experience in transforming girls' education. PhD in Educational Leadership from Oxford.",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_1.jpg",
+    bio: "Visionary leader guiding Wintouch Academy's mission to provide world-class education rooted in Islamic values.",
     isFeatured: true,
   },
   {
     id: 2,
-    name: "Dr. Ayesha Rahman",
-    role: "Academic Director",
-    department: "Academics",
-    image: "/team/member-2.png",
-    bio: "Former NEET topper and medical college professor with expertise in designing competitive exam curricula.",
+    name: "Usthad Khaleel Hudawi",
+    role: "Executive Director",
+    department: "Leadership",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_2.jpg",
+    bio: "Strategic leader overseeing the academy's operations and ensuring excellence in all aspects of student development.",
     isFeatured: true,
   },
   {
     id: 3,
-    name: "Ms. Mariam Sultana",
-    role: "Head of NEET Program",
+    name: "Dr Basim Gazali",
+    role: "Academic Director",
     department: "Academics",
-    image: "/team/member-3.png",
-    bio: "15 years of experience in NEET coaching with a track record of producing top 100 ranks.",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_3.jpg",
+    bio: "Expert in NEET preparation and academic excellence, leading the curriculum design and teaching methodology.",
     isFeatured: true,
   },
   {
     id: 4,
-    name: "Ms. Zainab Hassan",
-    role: "Chief Administrator",
-    department: "Administration",
-    image: "/team/member-4.png",
-    bio: "Expert in educational administration with focus on creating nurturing residential environments.",
+    name: "Mohamed Rashid",
+    role: "CEO",
+    department: "Leadership",
+    image: "https://cdn.wintouchacademy.com/public/site-assets/member_4.jpg",
+    bio: "Driving operational excellence and ensuring the highest standards of education and student care.",
     isFeatured: true,
-  },
-  {
-    id: 5,
-    name: "Ms. Hafsa Begum",
-    role: "Student Counselor",
-    department: "Student Welfare",
-    image: "/team/member-5.png",
-    bio: "Certified child psychologist specializing in adolescent mental health and career guidance.",
-  },
-  {
-    id: 6,
-    name: "Ms. Ruqaiya Khan",
-    role: "Sports Director",
-    department: "Physical Education",
-    image: "/0716.JPG",
-    bio: "National level athlete and certified equestrian trainer dedicated to building physical confidence.",
-  },
-  {
-    id: 7,
-    name: "Dr. Amina Patel",
-    role: "Head of Science",
-    department: "Academics",
-    image: "/0728.JPG",
-    bio: "PhD in Biochemistry with innovative teaching methods for Biology and Chemistry.",
-  },
-  {
-    id: 8,
-    name: "Ms. Khadija Noor",
-    role: "Hostel Warden",
-    department: "Student Welfare",
-    image: "/0367.JPG",
-    bio: "Caring guardian ensuring safety, comfort, and emotional well-being of all residential students.",
-  },
-  {
-    id: 9,
-    name: "Ustazah Maryam Ali",
-    role: "Islamic Studies Head",
-    department: "Islamic Education",
-    image: "/0294.JPG",
-    bio: "Hafiza and Islamic scholar creating a spiritually enriching environment for students.",
-  },
-  {
-    id: 10,
-    name: "Ms. Sarah Ibrahim",
-    role: "Nutrition Head",
-    department: "Health & Wellness",
-    image: "/0815.JPG",
-    bio: "Certified nutritionist managing halal-certified kitchen with balanced, healthy meal plans.",
   },
 ];

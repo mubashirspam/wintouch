@@ -7,7 +7,6 @@ export { default as Testimonials } from "./Testimonials";
 export { default as Admissions } from "./Admissions";
 export { default as FAQ } from "./FAQ";
 export { default as ImageGallery } from "./ImageGallery";
-export { default as PageHeader } from "./PageHeader";
 export { default as Team } from "./Team";
 export { default as TeamPage } from "./TeamPage";
-export { default as ScholarshipForm } from "./ScholarshipForm";
+export { default as AdmissionForm } from "./AdmissionForm";

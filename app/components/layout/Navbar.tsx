@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/app/components/ui";
-import { NAV_LINKS } from "@/app/data/constants";
+import { NAV_LINKS, WHATSAPP_LINK } from "@/app/data/constants";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -66,11 +66,12 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/admissions">
+          <Link href="/lead/instant">
             <Button variant="primary" className="py-2 px-6 text-sm">
               Apply Now
             </Button>
           </Link>
+          
         </div>
 
         {/* Mobile Menu Button */}
@@ -85,22 +86,32 @@ export default function Navbar() {
 
       {/* Mobile Nav Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white/80 backdrop-blur-xl shadow-xl shadow-[#2D1B2E]/10 border-t border-white/50 p-6 flex flex-col gap-4 animate-fade-in-up">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white/95 border-t border-[#2D1B2E]/5 p-6 flex flex-col gap-4 animate-fade-in-up">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.id}
               href={getHref(link.id)}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`text-left text-lg font-medium py-2 border-b border-gray-50 ${
+              className={`text-left text-lg font-medium py-2 border-b border-[#2D1B2E]/5 ${
                 isActive(link.id) ? "text-[#8C4B58]" : "text-[#2D1B2E]"
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <Link href="/admissions" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link href="/lead/instant" onClick={() => setIsMobileMenuOpen(false)}>
             <Button className="w-full mt-2">Apply Now</Button>
           </Link>
+          <a
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center justify-center gap-2 py-3 px-4 bg-[#2D1B2E] hover:bg-[#4A2F4A] text-white rounded-xl text-base font-semibold transition-all duration-300"
+          >
+            <MessageCircle className="w-5 h-5" />
+            <span>Chat with Us</span>
+          </a>
         </div>
       )}
     </nav>
